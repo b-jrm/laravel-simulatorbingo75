@@ -160,7 +160,7 @@ document.addEventListener('alpine:init', () => {
                     console.log("balls.len",balls.length);
                     console.log("balls.getBoundingClientRect",balls.getBoundingClientRect());
                     balls.map((ball) => {
-                        console.log("ball",ball);
+                        console.log("ball",ball); 
                     });
                 },1000);
                 
