@@ -25,14 +25,21 @@ document.addEventListener('alpine:init', () => {
             },
             config: {
                 section: {
+                    screen: {
+                        height: 0,
+                        width: 0,
+                    },
                     board: {
-                        extended: false,
+                        enabled: false,
+                        extended: true,
                     },
                     submodes: {
-                        extended: false,
+                        enabled: false,
+                        extended: true,
                     },
                     sequence: {
-                        extended: false,
+                        enabled: false,
+                        extended: true,
                     },
                 },
                 open: false,
@@ -91,7 +98,33 @@ document.addEventListener('alpine:init', () => {
                     wins: null,
                 }
             },
+            isMobile(){
+                if (
+                    navigator.userAgent.match(/Android/i) || 
+                    navigator.userAgent.match(/webOS/i) || 
+                    navigator.userAgent.match(/iPhone/i) || 
+                    navigator.userAgent.match(/iPad/i) 
+                    || navigator.userAgent.match(/iPod/i) || 
+                    navigator.userAgent.match(/BlackBerry/i) || 
+                    navigator.userAgent.match(/Windows Phone/i)
+                )
+                    return true;
+                else
+                    return false;
+            },
             loading(){
+
+                // console.log("screen.width",screen.width);
+                this.config.section.screen.width = screen.width;
+                // console.log(navigator.userAgent);
+
+                if( !this.isMobile() )
+                {
+                    this.config.section.board.enabled = true;
+                    this.config.section.board.extended = false;
+                    this.config.section.submodes.enabled = true;
+                    this.config.section.submodes.extended = false;
+                }
 
                 this.config.storage = localStorage.getItem('simulator');
 
@@ -151,18 +184,18 @@ document.addEventListener('alpine:init', () => {
 
                 // console.log("start function");
 
-                setTimeout(function(){
-                    var bounce = document.getElementById('content-bounce');
-                    console.log("content_bounce",bounce);
-                    console.log("getBoundingClientRect",bounce.getBoundingClientRect());
-                    var balls = document.querySelector('.ball-bounce');
-                    console.log("balls",balls);
-                    console.log("balls.len",balls.length);
-                    console.log("balls.getBoundingClientRect",balls.getBoundingClientRect());
-                    balls.map((ball) => {
-                        console.log("ball",ball); 
-                    });
-                },1000);
+                // setTimeout(function(){
+                //     var bounce = document.getElementById('content-bounce');
+                //     console.log("content_bounce",bounce);
+                //     console.log("getBoundingClientRect",bounce.getBoundingClientRect());
+                //     var balls = document.querySelector('.ball-bounce');
+                //     console.log("balls",balls);
+                //     console.log("balls.len",balls.length);
+                //     console.log("balls.getBoundingClientRect",balls.getBoundingClientRect());
+                //     balls.map((ball) => {
+                //         console.log("ball",ball); 
+                //     });
+                // },1000);
                 
 
 
@@ -411,10 +444,9 @@ document.addEventListener('alpine:init', () => {
                 this.setVolume(audio);
             },
             toggleView(name){
-                Object.keys(this.config.section).forEach(sec => {
-                    // this.config.section[sec]
-                    if( sec != name  ) this.config.section[sec].extended = false;
-                });
+                // Object.keys(this.config.section).forEach(sec => {
+                //     if( sec != name  ) this.config.section[sec].extended = false;
+                // });
                 this.config.section[name].extended = !this.config.section[name].extended;
             }
         })

@@ -61,7 +61,7 @@
                     </div>
 
                     <div class="w-full md:w-2/5 rounded-b-full p-0 bg-[#610720] text-white text-center text-[20px] font-bold grid grid-cols-2 border-4 border-yellow-800 border-t-0">
-                        <button type="button" class="p-2 bg-transparent border-r text-center text-white font-bold overflow-hidden cursor-pointer active:ring-0 active:outline-0" x-on:click="save">{{ __('Guardar') }}</button>
+                        <button type="button" class="p-2 bg-transparent border-r text-center text-white font-bold overflow-hidden cursor-pointer active:ring-0 active:outline-0" x-on:click="save">{{ __('Continuar') }}</button>
                         <button type="button" class="p-2 bg-transparent border-l text-center text-white font-bold overflow-hidden cursor-pointer active:ring-0 active:outline-0" x-on:click="finish">{{ __('Finalizar') }}</button>
                     </div>
 
@@ -97,28 +97,36 @@
                 <div class="w-full relative p-2 pb-12 flex flex-row flex-nowrap items-center justify-center">
                     <div class="bg-transparent focus:bg-gray-200 focus:bg-opacity-50 hover:bg-gray-200 hover:bg-opacity-50 text-black w-full flex justify-around items-center absolute bottom-0 left-0 z-10">
 
-                        <div class="flex flex-row justify-center items-center">
-                            
-                            <a class="flex flex-nowrap items-center rounded-sm cursor-pointer px-1 mx-1 focus:tooltip focus:tooltip-top focus:tooltip-warning text-white" :class="config.section.submodes.extended ? 'bg-[#C18C1A]' : 'bg-[#610720]'" data-tip="{{ __('Winning ways') }}" x-on:click="toggleView('submodes')">
-                                <svg class="w-[25px] h-[25px]" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28"><path fill="currentColor" d="M3 6.75A3.75 3.75 0 0 1 6.75 3H9.5v6.5H3V6.75ZM3 11v6h6.5v-6H3Zm0 7.5v2.75A3.75 3.75 0 0 0 6.75 25H9.5v-6.5H3Zm8 6.5h6v-6.5h-6V25Zm7.5 0h2.75A3.75 3.75 0 0 0 25 21.25V18.5h-6.5V25Zm6.5-8v-6h-6.5v6H25Zm0-7.5V6.75A3.75 3.75 0 0 0 21.25 3H18.5v6.5H25ZM17 3h-6v6.5h6V3Zm0 8v6h-6v-6h6Z"/></svg>
-                                <p class="font-thin hidden md:inline-block">{{ __('Ways') }}</p>
-                            </a>
+                        <template x-if="config.section.submodes.enabled || config.section.board.enabled">
+                            <div class="flex flex-row justify-center items-center">
 
-                            <a class="flex flex-nowrap items-center rounded-sm cursor-pointer px-1 mx-1 focus:tooltip focus:tooltip-top focus:tooltip-warning text-white" :class="config.section.board.extended ? 'bg-[#C18C1A]' : 'bg-[#610720]'" data-tip="{{ __('View Board') }}" x-on:click="toggleView('board')">
-                                <svg class="w-[25px] h-[25px]" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 256 256"><path fill="currentColor" d="M224 44H32a12 12 0 0 0-12 12v136a20 20 0 0 0 20 20h176a20 20 0 0 0 20-20V56a12 12 0 0 0-12-12ZM44 116h32v24H44Zm56 0h112v24H100Zm112-48v24H44V68ZM44 164h32v24H44Zm56 24v-24h112v24Z"/></svg>
-                                <p class="font-thin hidden md:inline-block">{{ __('Board') }}</p>
-                            </a>
+                                <template x-if="config.section.submodes.enabled">
+                                    <a class="flex flex-nowrap items-center rounded-sm cursor-pointer px-1 mx-1 focus:tooltip focus:tooltip-top focus:tooltip-warning text-white" :class="config.section.submodes.extended ? 'bg-[#C18C1A]' : 'bg-[#610720]'" data-tip="{{ __('Winning ways') }}" x-on:click="toggleView('submodes')">
+                                        <svg class="w-[25px] h-[25px]" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28"><path fill="currentColor" d="M3 6.75A3.75 3.75 0 0 1 6.75 3H9.5v6.5H3V6.75ZM3 11v6h6.5v-6H3Zm0 7.5v2.75A3.75 3.75 0 0 0 6.75 25H9.5v-6.5H3Zm8 6.5h6v-6.5h-6V25Zm7.5 0h2.75A3.75 3.75 0 0 0 25 21.25V18.5h-6.5V25Zm6.5-8v-6h-6.5v6H25Zm0-7.5V6.75A3.75 3.75 0 0 0 21.25 3H18.5v6.5H25ZM17 3h-6v6.5h6V3Zm0 8v6h-6v-6h6Z"/></svg>
+                                        <p class="font-thin hidden md:inline-block">{{ __('Ways') }}</p>
+                                    </a>
+                                </template>
 
-                        </div>
+                                <template x-if="config.section.board.enabled">
+                                    <a class="flex flex-nowrap items-center rounded-sm cursor-pointer px-1 mx-1 focus:tooltip focus:tooltip-top focus:tooltip-warning text-white" :class="config.section.board.extended ? 'bg-[#C18C1A]' : 'bg-[#610720]'" data-tip="{{ __('View Board') }}" x-on:click="toggleView('board')">
+                                        <svg class="w-[25px] h-[25px]" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 256 256"><path fill="currentColor" d="M224 44H32a12 12 0 0 0-12 12v136a20 20 0 0 0 20 20h176a20 20 0 0 0 20-20V56a12 12 0 0 0-12-12ZM44 116h32v24H44Zm56 0h112v24H100Zm112-48v24H44V68ZM44 164h32v24H44Zm56 24v-24h112v24Z"/></svg>
+                                        <p class="font-thin hidden md:inline-block">{{ __('Board') }}</p>
+                                    </a>
+                                </template>
 
-                        <div class="flex justify-center items-center">
-                            <a class="pl-4 cursor-pointer text-[#C18C1A]" x-on:click="moveScroll(0, -222, '.slider', true)">
-                                <svg class="w-[30px] h-[30px]" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><g fill="none" fill-rule="evenodd"><path d="M24 0v24H0V0h24ZM12.594 23.258l-.012.002l-.071.035l-.02.004l-.014-.004l-.071-.036c-.01-.003-.019 0-.024.006l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427c-.002-.01-.009-.017-.016-.018Zm.264-.113l-.014.002l-.184.093l-.01.01l-.003.011l.018.43l.005.012l.008.008l.201.092c.012.004.023 0 .029-.008l.004-.014l-.034-.614c-.003-.012-.01-.02-.02-.022Zm-.715.002a.023.023 0 0 0-.027.006l-.006.014l-.034.614c0 .012.007.02.017.024l.015-.002l.201-.093l.01-.008l.003-.011l.018-.43l-.003-.012l-.01-.01l-.184-.092Z"/><path fill="currentColor" d="M6 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h12a3 3 0 0 0 3-3V6a3 3 0 0 0-3-3H6Zm7.707 6.879L11.586 12l2.121 2.121a1 1 0 0 1-1.414 1.415l-2.829-2.829a1 1 0 0 1 0-1.414l2.829-2.829a1 1 0 1 1 1.414 1.415Z"/></g></svg>
-                            </a>
-                            <a class="pr-4 cursor-pointer text-[#C18C1A]" x-on:click="moveScroll(0, 222, '.slider', true)">
-                                <svg class="w-[30px] h-[30px]" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><g fill="none" fill-rule="evenodd"><path d="M24 0v24H0V0h24ZM12.594 23.258l-.012.002l-.071.035l-.02.004l-.014-.004l-.071-.036c-.01-.003-.019 0-.024.006l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427c-.002-.01-.009-.017-.016-.018Zm.264-.113l-.014.002l-.184.093l-.01.01l-.003.011l.018.43l.005.012l.008.008l.201.092c.012.004.023 0 .029-.008l.004-.014l-.034-.614c-.003-.012-.01-.02-.02-.022Zm-.715.002a.023.023 0 0 0-.027.006l-.006.014l-.034.614c0 .012.007.02.017.024l.015-.002l.201-.093l.01-.008l.003-.011l.018-.43l-.003-.012l-.01-.01l-.184-.092Z"/><path fill="currentColor" d="M6 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h12a3 3 0 0 0 3-3V6a3 3 0 0 0-3-3H6Zm4.293 11.121L12.414 12l-2.121-2.121a1 1 0 1 1 1.414-1.415l2.829 2.829a1 1 0 0 1 0 1.414l-2.829 2.829a1 1 0 1 1-1.414-1.415Z"/></g></svg>
-                            </a>
-                        </div>
+                            </div>
+                        </template>
+                       
+                        <template x-if="config.section.screen.width <= 700">
+                            <div class="flex justify-center items-center">
+                                <a class="pl-4 cursor-pointer text-[#C18C1A]" x-on:click="moveScroll(0, -222, '.slider', true)">
+                                    <svg class="w-[30px] h-[30px]" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><g fill="none" fill-rule="evenodd"><path d="M24 0v24H0V0h24ZM12.594 23.258l-.012.002l-.071.035l-.02.004l-.014-.004l-.071-.036c-.01-.003-.019 0-.024.006l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427c-.002-.01-.009-.017-.016-.018Zm.264-.113l-.014.002l-.184.093l-.01.01l-.003.011l.018.43l.005.012l.008.008l.201.092c.012.004.023 0 .029-.008l.004-.014l-.034-.614c-.003-.012-.01-.02-.02-.022Zm-.715.002a.023.023 0 0 0-.027.006l-.006.014l-.034.614c0 .012.007.02.017.024l.015-.002l.201-.093l.01-.008l.003-.011l.018-.43l-.003-.012l-.01-.01l-.184-.092Z"/><path fill="currentColor" d="M6 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h12a3 3 0 0 0 3-3V6a3 3 0 0 0-3-3H6Zm7.707 6.879L11.586 12l2.121 2.121a1 1 0 0 1-1.414 1.415l-2.829-2.829a1 1 0 0 1 0-1.414l2.829-2.829a1 1 0 1 1 1.414 1.415Z"/></g></svg>
+                                </a>
+                                <a class="pr-4 cursor-pointer text-[#C18C1A]" x-on:click="moveScroll(0, 222, '.slider', true)">
+                                    <svg class="w-[30px] h-[30px]" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><g fill="none" fill-rule="evenodd"><path d="M24 0v24H0V0h24ZM12.594 23.258l-.012.002l-.071.035l-.02.004l-.014-.004l-.071-.036c-.01-.003-.019 0-.024.006l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427c-.002-.01-.009-.017-.016-.018Zm.264-.113l-.014.002l-.184.093l-.01.01l-.003.011l.018.43l.005.012l.008.008l.201.092c.012.004.023 0 .029-.008l.004-.014l-.034-.614c-.003-.012-.01-.02-.02-.022Zm-.715.002a.023.023 0 0 0-.027.006l-.006.014l-.034.614c0 .012.007.02.017.024l.015-.002l.201-.093l.01-.008l.003-.011l.018-.43l-.003-.012l-.01-.01l-.184-.092Z"/><path fill="currentColor" d="M6 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h12a3 3 0 0 0 3-3V6a3 3 0 0 0-3-3H6Zm4.293 11.121L12.414 12l-2.121-2.121a1 1 0 1 1 1.414-1.415l2.829 2.829a1 1 0 0 1 0 1.414l-2.829 2.829a1 1 0 1 1-1.414-1.415Z"/></g></svg>
+                                </a>
+                            </div>
+                        </template>
 
                         <button type="button" class="py-1 px-6 py-3 bg-[#610720] rounded text-center text-white font-bold overflow-hidden cursor-pointer active:ring-0 active:outline-0" x-on:click="bingo">{{ __('Bingo') }}</button>
 

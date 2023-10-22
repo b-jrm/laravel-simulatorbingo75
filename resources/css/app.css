@@ -19,6 +19,11 @@
     display: none;
 }
 
+::-webkit-scrollbar:vertical {
+    width: 7px;
+    background-color: transparent;
+}
+
 ::-webkit-scrollbar:horizontal {
     height: 2px;
     background-color: transparent;

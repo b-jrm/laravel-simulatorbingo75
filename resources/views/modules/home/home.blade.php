@@ -51,6 +51,45 @@
                    
                 </a>
 
+                @if (Route::has('login'))
+                    @auth
+                        <a href="{{ url('/dashboard') }}" class="ml-4 font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Dashboard</a>
+                    @else
+                        <a href="{{ route('login') }}" class="p-0 m-0 mb-6">
+
+                            <div class="flex flex-row flex-nowrap items-center justify-between w-full border rounded-full bg-[#610720] overflow-hidden text-white hover:text-black hover:bg-white transition-all">
+
+                                <div class="text-black bg-white p-4">
+                                    <svg class="w-[25px] h-[25px]" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M10 20H8V4h2v2h2v3h2v2h2v2h-2v2h-2v3h-2v2z"/></svg>
+                                </div>
+
+                                <div class="w-full h-full p-4">
+                                    <p class="">{{ __('Login') }}</p>
+                                </div>
+                                
+                            </div>
+
+                        </a>
+                        @if (Route::has('register'))
+                            <a href="{{ route('register') }}" class="p-0 m-0 mb-6">
+
+                                <div class="flex flex-row flex-nowrap items-center justify-between w-full border rounded-full bg-[#610720] overflow-hidden text-white hover:text-black hover:bg-white transition-all">
+
+                                    <div class="text-black bg-white p-4">
+                                        <svg class="w-[25px] h-[25px]" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M10 20H8V4h2v2h2v3h2v2h2v2h-2v2h-2v3h-2v2z"/></svg>
+                                    </div>
+
+                                    <div class="w-full h-full p-4">
+                                        <p class="">{{ __('Register') }}</p>
+                                    </div>
+                                    
+                                </div>
+
+                            </a>
+                        @endif
+                    @endauth
+                @endif
+
 
                 <!-- <a href="{{ route('support') }}" class="p-0 m-0 mb-6">
                     <div class="flex flex-row flex-nowrap items-center justify-between w-full border rounded-full bg-[#610720] overflow-hidden text-white hover:text-black hover:bg-white transition-all">
