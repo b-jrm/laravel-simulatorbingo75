@@ -73,6 +73,7 @@ class AccessController extends Controller
         $token = $user->createToken('auth_token')->plainTextToken;
 
         if( empty($token) )
+
             return response()->json([ 'msg' => 'Unauthorized' ], 401 )->getContent();
 
         $last_token = Token::where('user_id',$user->user_id)->first();
@@ -94,6 +95,23 @@ class AccessController extends Controller
                 'type' => 'Bearer', 
                 'token' => $token 
             ]
+        ]);
+
+    }
+
+    public function confirmation(Request $request){
+
+        $user = User::where('user_id',$request->user_id)->where('verified_at',null)->first();
+
+        if( empty($user) )
+            return response()->json([ 'msg' => 'Unknown or expired link' ], 401 )->getContent();
+
+        $user->verified_at = date('Y-m-d H:i:s');
+        $user->save();
+
+        return response()->json([ 
+            'success' => 1,
+            'msg' => 'Confirmed, '.mb_strtolower($user->email).'!', 
         ]);
 
     }

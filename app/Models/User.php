@@ -45,4 +45,8 @@ class User extends Authenticatable
         'verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function token(){
+        return $this->hasOne(Token::class,'user_id','user_id'); 
+    }
 }

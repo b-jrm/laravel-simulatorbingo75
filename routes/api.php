@@ -34,6 +34,12 @@ Route::get('/storage', function(){
     return response()->json([ 'response' => 'executed' ]);
 });
 
+Route::middleware('auth.api')->group(function(){
+
+    Route::get('/confirmation', [AccessController::class, 'confirmation'])->name('confirmation');
+
+});
+
 // Route::middleware(['auth', 'system'])->group
 // Route::group(function () {
 
