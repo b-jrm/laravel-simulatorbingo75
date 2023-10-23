@@ -67,7 +67,7 @@ class AccessController extends Controller
 
         $user = User::where('email',$request->email)->where('verified_at','!=',null)->first();
 
-        if( !empty($user) )
+        if( empty($user) )
             return response()->json([ 'msg' => 'Unauthorized User' ], 401 )->getContent();
 
         $token = $user->createToken('auth_token')->plainTextToken;
