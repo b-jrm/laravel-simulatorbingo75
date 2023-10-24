@@ -22,7 +22,7 @@ class AccessController extends Controller
         ]);
 
         if( $validator->fails() )
-            return response()->json($validator->errors())->getContent();
+            return response()->json(['status' => 0, 'result' => $validator->errors()])->getContent();
 
         $user = User::create([
             'email' => $request->email,
@@ -30,12 +30,12 @@ class AccessController extends Controller
         ]);
 
         if( empty($user) )
-            return response()->json([ 'msg' => 'Failed register' ])->getContent();
+            return response()->json([ 'status' => 0, 'result' => 'Failed register' ])->getContent();
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
         if( empty($token) )
-            return response()->json([ 'msg' => 'Failed create token' ], 401 )->getContent();
+            return response()->json([ 'status' => 0, 'result' => 'Failed create token' ], 401 )->getContent();
 
         $last_token = Token::where('user_id',$user->user_id)->first();
         if( !empty($last_token) ){
@@ -51,7 +51,8 @@ class AccessController extends Controller
         }
 
         return response()->json([ 
-            'msg' => 'Welcome, '.$user->email.'!', 
+            'status' => 1,
+            'result' => 'Welcome, '.$user->email.'!', 
             'access' => [ 
                 'type' => 'Bearer', 
                 'token' => $token 
@@ -63,18 +64,17 @@ class AccessController extends Controller
     public function login(Request $request){
 
         if( !Auth::attempt($request->only('email','password')) )
-            return response()->json([ 'msg' => 'Unauthorized Credentials' ], 401 )->getContent();
+            return response()->json([ 'status' => 0, 'result' => 'Unauthorized Credentials' ], 401 )->getContent();
 
         $user = User::where('email',$request->email)->where('verified_at','!=',null)->first();
 
         if( empty($user) )
-            return response()->json([ 'msg' => 'Unauthorized User' ], 401 )->getContent();
+            return response()->json([ 'status' => 0, 'result' => 'Unauthorized User' ], 401 )->getContent();
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
         if( empty($token) )
-
-            return response()->json([ 'msg' => 'Unauthorized' ], 401 )->getContent();
+            return response()->json([ 'status' => 0, 'result' => 'Unauthorized' ], 401 )->getContent();
 
         $last_token = Token::where('user_id',$user->user_id)->first();
         if( !empty($last_token) ){
@@ -90,7 +90,8 @@ class AccessController extends Controller
         }
 
         return response()->json([ 
-            'msg' => 'Authorized, '.$user->email.'!', 
+            'status' => 1,
+            'result' => 'Authorized, '.$user->email.'!', 
             'access' => [ 
                 'type' => 'Bearer', 
                 'token' => $token 
@@ -98,20 +99,20 @@ class AccessController extends Controller
         ]);
 
     }
-
+    
     public function confirmation(Request $request){
 
         $user = User::where('user_id',$request->user_id)->where('verified_at',null)->first();
 
         if( empty($user) )
-            return response()->json([ 'msg' => 'Unknown or expired link' ], 401 )->getContent();
+            return response()->json([ 'status' => 0, 'result' => 'Unknown or expired link' ], 401 )->getContent();
 
         $user->verified_at = date('Y-m-d H:i:s');
         $user->save();
 
         return response()->json([ 
-            'success' => 1,
-            'msg' => 'Confirmed, '.mb_strtolower($user->email).'!', 
+            'status' => 1,
+            'result' => 'Confirmed, '.mb_strtolower($user->email).'!', 
         ]);
 
     }
