@@ -10,6 +10,7 @@ use Validator;
 
 use App\Models\User;
 use App\Models\Token;
+use App\Models\Information;
 
 class AccessController extends Controller
 {
@@ -28,6 +29,13 @@ class AccessController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password)
         ]);
+
+        if( !empty($user) && isset($request->name)){
+            Information::create([
+                'user_id' => $user->user_id,
+                'nickname' => $request->name
+            ]);
+        }
 
         if( empty($user) )
             return response()->json([ 'status' => 0, 'result' => 'Failed register' ])->getContent();
@@ -56,6 +64,10 @@ class AccessController extends Controller
             'access' => [ 
                 'type' => 'Bearer', 
                 'token' => $token 
+            ],
+            'user' => [
+                'email' => $user->email,
+                'name' => $request->name?? null,
             ]
         ]);
 

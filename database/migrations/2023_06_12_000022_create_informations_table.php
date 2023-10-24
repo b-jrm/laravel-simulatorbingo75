@@ -20,8 +20,8 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id')->nullable();
             $table->foreign('user_id')->references('user_id')->on('users')->nullOnDelete();
             $table->string('nickname');
-            $table->string('firstname');
-            $table->string('lastname');
+            $table->string('firstname')->nullable();
+            $table->string('lastname')->nullable();
             $table->unsignedBigInteger('document_id')->nullable();
             $table->foreign('document_id')->references('document_id')->on('documents')->nullOnDelete();
             $table->string('numberdocument')->nullable();
