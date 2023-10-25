@@ -128,4 +128,37 @@ class AccessController extends Controller
         ]);
 
     }
+
+    public function auth(Request $request){
+
+        $authorized = [ 
+            'status' => 0,
+            'result' => 'Unknown or Expired Token', 
+            'access' => null
+        ];
+
+        if( $request->bearerToken() ){
+            $token = Token::select(
+                    'user.email',
+                    'informations.nickname',
+                    'tokens.expires_at'
+                )
+                ->join('users', 'tokens.user_id', 'users.user_id')
+                ->join('informations', 'users.user_id', 'informations.user_id')
+                ->where('tokens.token',$request->bearerToken())
+                ->first();
+            
+            if(!empty($token) && date('Y-m-d H:i:s') <= date('Y-m-d H:i:s', strtotime($token['expires_at']))){
+                $authorized['status'] = 1;
+                $authorized['result'] = 'The token is valid';
+                $authorized['user'] = [
+                    'email' => $token['email'],
+                    'name' => $token['nickname']
+                ];
+            }
+        }
+
+        return response()->json($authorized);
+
+    }
 }
