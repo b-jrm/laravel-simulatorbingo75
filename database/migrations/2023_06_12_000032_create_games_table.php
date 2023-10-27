@@ -15,10 +15,12 @@ return new class extends Migration
 
             $table->charset = 'utf8';
             $table->collation = 'utf8_spanish_ci';
-            
             $table->bigIncrements('game_id');
             $table->timestamp('time_start')->nullable();
             $table->integer('max_players');
+            $table->integer('min_players');
+            $table->decimal('price_bet', 11, 2);
+            $table->decimal('price_win', 11, 2);
             $table->unsignedBigInteger('context_id')->nullable();
             $table->foreign('context_id')->references('context_id')->on('contexts')->nullOnDelete();
             $table->timestamps();

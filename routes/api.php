@@ -37,6 +37,7 @@ Route::get('/storage', function(){
 Route::middleware('auth.api')->group(function(){
 
     Route::get('/confirmation', [AccessController::class, 'confirmation'])->name('confirmation');
+    Route::get('/programmed', [AccessController::class, 'programmed'])->name('programmed');
 
 });
 

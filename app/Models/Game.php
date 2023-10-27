@@ -15,6 +15,9 @@ class Game extends Model
     protected $fillable = [
         'time_start',
         'max_players',
+        'min_players',
+        'price_bet',
+        'price_win',
         'context_id',
     ];
 
