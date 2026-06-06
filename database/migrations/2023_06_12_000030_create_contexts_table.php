@@ -16,7 +16,7 @@ return new class extends Migration
             $table->collation = 'utf8_spanish_ci';
             $table->bigIncrements('context_id');
             $table->string('name');
-            $table->string('mode',[ 'H', 'V' ])->default('V');
+            $table->enum('mode',[ 'H', 'V' ])->default('V');
             $table->integer('rows');
             $table->integer('columns');
             $table->integer('is_with_letters')->default(1);
