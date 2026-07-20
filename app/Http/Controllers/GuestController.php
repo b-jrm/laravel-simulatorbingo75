@@ -21,4 +21,12 @@ class GuestController extends Controller
             'user' => $request->user(),
         ]);
     }
+
+    public function render(Request $request): View
+    {
+        return view('modules.home.home2', [
+            'user' => $request->user(),
+        ]);
+    }
+
 }

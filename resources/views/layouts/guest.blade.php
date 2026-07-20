@@ -8,7 +8,7 @@
         <title>{{ config('app.name', 'Laravel') }}</title>
 
         <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
+        <!-- <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -21,7 +21,7 @@
                 font-family: 'Raleway', sans-serif;
                 font-family: 'Ysabeau Infant', sans-serif;
             }
-        </style>
+        </style> -->
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -31,13 +31,14 @@
         @endif
 
     </head>
-    <body class="antialiased bg-slate-100 relative text-[15px] overflow-hidden overflow-y-auto min-h-screen" x-data="Layout()" x-init="responsive">
+    <!-- <body class="antialiased bg-slate-100 relative text-[15px] overflow-hidden overflow-y-auto min-h-screen" x-data="Layout()" x-init="responsive"> -->
+    <body class="min-h-screen bg-gradient-to-br from-indigo-950 via-purple-900 to-fuchsia-900 text-white overflow-x-hidden" x-data="Layout()" x-init="responsive">
 
         @if(isset($header))
             {{ $header }}
         @endif
 
-        <main class="p-4 m-0">
+        <main class="relative z-10 flex min-h-screen flex-col items-center justify-center px-6 py-16 text-center">
             {{ $slot }}
         </main>
         

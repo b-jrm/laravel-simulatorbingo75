@@ -46,7 +46,17 @@ document.addEventListener('alpine:init', () => {
                     });
                 }
                 
-            }
+            },
+            // Balls Home
+            balls: Array.from({ length: 16 }, (_, i) => ({
+                    id: i,
+                    num: Math.floor(Math.random() * 75) + 1,
+                    left: Math.random() * 100,
+                    delay: (Math.random() * 10).toFixed(2),
+                    duration: (12 + Math.random() * 10).toFixed(2),
+                    size: 40 + Math.floor(Math.random() * 30)
+                })
+            )
         })
     );
 })

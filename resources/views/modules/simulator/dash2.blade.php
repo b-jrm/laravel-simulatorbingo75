@@ -1,48 +1,24 @@
 <x-guest-layout>
 
-    <x-slot name="styles">
-        <style>
-            @keyframes float {
-                0%   { transform: translateY(110vh) translateX(0) rotate(0deg); }
-                100% { transform: translateY(-15vh) translateX(20px) rotate(360deg); }
-            }
-            .animate-float {
-                position: absolute;
-                top: 0;
-                animation-name: float;
-                animation-timing-function: linear;
-                animation-iteration-count: infinite;
-            }
-        </style>
-    </x-slot>
+    <div x-data="ConfigSimulator()" x-init="form()" class="w-full relative grid grid-cols-1 gap-4 p-6 bg-[#610720] from-gray-700/50 via-transparent dark:ring-1 dark:ring-inset dark:ring-white/5 shadow-2xl shadow-gray-500/20 dark:shadow-none transition-all duration-250 focus:outline focus:outline-2 focus:outline-red-500 overflow-hidden min-h-screen text-[20px]">
+        
+        <div class="w-full h-full absolute top-0 left-0 bg-[#4c0519] flex flex-col items-center justify-center text-[15px] text-white font-thin z-10" x-show="storage !== null">
+            <p class="text-[25px] text-white m-3">Tienes una partida pendiente</p>
+            <div class="grid grid-cols-2 gap-3">
+                <button type="button" class="p-2 border border-white md:border-black bg-transparent text-white md:text-black rounded-md font-bold hover:text-white hover:border-white" x-on:click="continueGame()">Continuar partida</button>
+                <button type="button" class="p-2 border border-black bg-transparent text-black rounded-md font-black hover:text-white hover:border-white" x-on:click="newGame()">Nueva partida</button>
+            </div>
+            
+        </div>
+    
+        <h3 class="font-bold text-center text-white pb-1 border-b">SIMULADOR DE BINGO 75</h3>
 
-    <!-- <x-slot name="header"></x-slot> -->
-
-    <div class="pointer-events-none fixed inset-0 overflow-hidden opacity-30">
-        <template x-for="ball in balls" :key="ball.id">
-            <div
-                class="absolute rounded-full bg-white/90 text-indigo-900 font-extrabold flex items-center justify-center shadow-lg animate-float"
-                :style="`left: ${ball.left}%; width: ${ball.size}px; height: ${ball.size}px; font-size: ${ball.size/2.5}px; animation-delay: ${ball.delay}s; animation-duration: ${ball.duration}s;`"
-                x-text="ball.num"
-            ></div>
-        </template>
-    </div>
-
-    <div class="w-full max-w-lg text-center mb-8">
-        <span class="mb-3 inline-block rounded-full bg-white/10 px-4 py-1 text-sm font-medium tracking-wide text-fuchsia-200 backdrop-blur">
-            Configura tu partida
-        </span>
-        <h1 class="text-4xl sm:text-5xl font-black tracking-tight drop-shadow-lg">
-            Simulador de <span class="text-fuchsia-400">Bingo</span>
-        </h1>
-    </div>
-
-    <!--  method="POST" action="{{ route('simulator') }}" -->
-    <form x-data="ConfigSimulator()" x-init="form()"
-            class="w-full max-w-lg rounded-3xl border border-white/10 bg-white/5 p-6 sm:p-8 shadow-2xl backdrop-blur-md space-y-8">
-        @csrf
-
-        <div class="w-full h-full absolute top-0 left-0 flex flex-col items-center justify-center text-[15px] text-white font-thin z-20" x-show="progress.status > 0 && progress.status < 100">
+        <div class="w-full h-full absolute top-0 left-0 bg-[#4c0519] bg-opacity-80 flex flex-col items-center justify-center text-[15px] text-white font-thin z-10" x-show="progress.status > 0 && progress.status < 100">
+            
+            <!-- <svg aria-hidden="true" role="status" class="inline w-4 h-4 mr-3 text-purple animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="#E5E7EB"/>
+                <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentColor"/>
+            </svg> -->
             
             <div class="mb-1 text-base font-medium text-purple-700 dark:text-white text-left flex flex-row flex-nowrap w-3/5 pl-1">
                 <p>&#10140;</p>&nbsp;<p class="text-[14px] font-thin" x-text="progress.process">Loading ...</p>
@@ -53,82 +29,54 @@
             
         </div>
 
-        <div class="w-full h-full absolute top-0 left-0 bg-gradient-to-br from-indigo-950 via-purple-900 to-fuchsia-900 flex flex-col items-center gap-6 text-[15px] text-white font-thin z-20" x-show="storage !== null">
-            <h1 class="text-5xl sm:text-6xl md:text-7xl font-black tracking-tight drop-shadow-lg">
-                Partida<span class="text-fuchsia-400">Sin terminar</span>
-            </h1>
-            <span class="mb-3 inline-block rounded-full bg-white/10 px-4 py-1 text-sm font-medium tracking-wide text-fuchsia-200 backdrop-blur">
-                ¿Desea continuar?
-            </span>
-
-            <div class="grid grid-cols-2 gap-3">
-                <button type="button" x-on:click="continueGame()"
-                    class="inline-flex items-center justify-center gap-2 rounded-2xl border-2 border-white/40 bg-white/5 px-8 py-4 text-lg font-bold text-white backdrop-blur transition hover:bg-fuchsia-400 hover:-translate-y-0.5 active:translate-y-0 focus:outline-none focus:ring-4 focus:ring-fuchsia-300/50">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 1200 1200">
-                        <path d="M0 0h1200v1200H0z" fill="none" />
-                        <path fill="currentColor" d="m1004.237 99.152l-611.44 611.441l-198.305-198.305L0 706.779l198.305 198.306l195.762 195.763L588.56 906.355L1200 294.916z" />
-                    </svg>
-                    Si
-                </button>
-                <button type="button" x-on:click="newGame()"
-                    class="inline-flex items-center justify-center gap-2 rounded-2xl border-2 border-white/40 bg-white/5 px-8 py-4 text-lg font-bold text-white backdrop-blur transition hover:bg-fuchsia-400 hover:-translate-y-0.5 active:translate-y-0 focus:outline-none focus:ring-4 focus:ring-fuchsia-300/50">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20">
-                        <path d="M0 0h20v20H0z" fill="none" />
-                        <path fill="currentColor" d="m12.12 10l3.53 3.53l-2.12 2.12L10 12.12l-3.54 3.54l-2.12-2.12L7.88 10L4.34 6.46l2.12-2.12L10 7.88l3.54-3.53l2.12 2.12z" />
-                    </svg>
-                    No
-                </button>
-            </div>
-            
-        </div>
-
-        <div class="z-10" x-show="storage === null">
-            <label class="mb-3 block text-sm font-semibold text-indigo-100">
-                {{ __('Tipo de bingo') }}
-                <span class="inline-block tooltip tooltip-top tooltip-warning lowercase" data-tip="{{ __('Seleccione el tipo de bingo que quiere jugar') }}&#10;">
+        <div class="flex flex-col items-start justify-center text-white font-thin border-b pb-4">
+            <small class="text-[13px] uppercase">
+                Juego:&nbsp;
+                <span class="inline-block tooltip tooltip-top tooltip-warning lowercase" data-tip="Disponible de 75 bolas&#10;">
                     <svg name="info" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path fill="currentColor" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13a6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2a1 1 0 0 1 0 2Z"/></svg>
                 </span>
-            </label>
-            <div class="grid grid-cols-2 gap-3">
-                <template x-for="context in dash.contexts" :key="context.context_id">
-                     <button type="button"
-                            x-on:click="getModes(context.context_id)"
-                            :class="config.context === context.context_id
-                                ? 'bg-fuchsia-500 border-fuchsia-400 shadow-lg shadow-fuchsia-900/40'
-                                : 'bg-white/5 border-white/15 hover:bg-white/10'"
-                            class="rounded-xl border-2 px-4 py-3 text-sm font-bold transition">
-                        <span x-text="context.name"></span>
-                    </button>
+            </small>
+            <select class="w-full rounded-lg leading-2 text-black ring-offset-2 ring-2 focus:ring-offset-2 focus:ring-2" 
+                x-model="config.context"
+                x-on:change="getModes()"
+                disabled>
+                <option value="0" selected>...</option>
+                <template x-for="context in dash.contexts">
+                    <option :value="context.context_id" x-text="context.name" x-bind:selected="context.context_id == 1"></option>
                 </template>
-            </div>
+            </select>
         </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
 
-        {{-- Modos ganadores --}}
-        <div>
-            <label class="mb-3 block text-sm font-semibold text-indigo-100">
-                {{ __('Modos ganadores') }}
-            </label>
-            <div class="grid grid-cols-2 gap-2">
-                <template x-for="mode in dash.modes" :key="mode.mode_id">
-                    <label
-                        :class="mode.mode_id == config.mode.id
-                            ? 'bg-fuchsia-500/90 border-fuchsia-400'
-                            : 'bg-white/5 border-white/15 hover:bg-white/10'"
-                        class="flex cursor-pointer items-center gap-2 rounded-xl border-2 px-3 py-2.5 text-sm font-medium transition select-none">
-                        <input type="radio"
-                            :value="mode.mode_id"
-                            x-model="config.mode.id"
-                            x-on:click="getSubmodes(null, mode.mode_id, mode.name)"
-                            class="sr-only"
-                        >
-                        <svg x-show="mode.mode_id == config.mode.id" class="h-4 w-4 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                        </svg>
-                        <span x-text="mode.name"></span>
-                    </label>
-                </template>
+            
+            <div class="flex flex-col items-start justify-center text-white font-thin pb-4 md:col-span-2">
+                <small class="text-[13px] uppercase">
+                    Bingos&nbsp;ganadores&nbsp;
+                    <span class="inline-block tooltip tooltip-top tooltip-warning lowercase" data-tip="Seleccione las formas ganadoras de bingo&#10;">
+                        <svg name="info" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path fill="currentColor" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13a6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2a1 1 0 0 1 0 2Z"/></svg>
+                    </span>
+                </small>
+                <select class="w-full rounded-lg leading-2 text-black ring-offset-2 ring-2 focus:ring-offset-2 focus:ring-2" 
+                    x-model="config.mode.id"
+                    x-on:change="getSubmodes"
+                >
+                    <option value="" selected>...</option>
+                    <template x-for="mode in dash.modes">
+                        <option :value="mode.mode_id" x-text="mode.name"></option>
+                    </template>
+                </select>
             </div>
-            <p class="mt-2 text-xs text-indigo-200/60">Puedes elegir uno o varios modos de victoria.</p>
+
+            <!-- <div class="flex flex-col items-start justify-center text-white font-thin pb-4 md:col-span-2 lg:col-span-4" x-model="config.submode">
+                <small class="text-[13px]">Subforma ganadora</small>
+                <select class="w-full rounded-lg leading-2 text-black ring-offset-2 ring-2 focus:ring-offset-2 focus:ring-2">
+                    <option value="" selected>...</option>
+                    <template x-for="submode in dash.submodes">
+                        <option :value="submode.submode_id" x-text="submode.name"></option>
+                    </template>
+                </select>
+            </div> -->
+
             <div class="flex flex-row items-start text-white font-thin pb-4 col-span-1 md:col-span-2 lg:col-span-4 p-4 text-center overflow-x-auto border border-yellow border-b-0 bg-gray-200 bg-opacity-20" x-show="config.submodes.length">
                 <!-- <Objetive v-bind:types="game.mode"></Objetive> -->
                 <!-- <p>Modos Ganadores Seleccionados</p> -->
@@ -154,74 +102,58 @@
                 </template>
                 
             </div>
-        </div>
 
-        {{-- Cantidad de cartones --}}
-        <div>
-            <label class="mb-3 block text-sm font-semibold text-indigo-100">Cantidad de cartones</label>
-            <div class="grid grid-cols-4 gap-3">
-                <template x-for="n in [1,2,3,4]" :key="n">
-                    <button type="button"
-                            @click="config.count_cartons = n"
-                            :class="config.count_cartons === n
-                                ? 'bg-fuchsia-500 border-fuchsia-400 shadow-lg shadow-fuchsia-900/40'
-                                : 'bg-white/5 border-white/15 hover:bg-white/10'"
-                            class="rounded-xl border-2 py-3 text-lg font-bold transition">
-                        <span x-text="n"></span>
-                    </button>
-                </template>
+            <div class="flex flex-col items-start justify-center text-white font-thin pb-4 md:col-span-2">
+                <small class="uppercase">
+                    Cantidad&nbsp;de&nbsp;cartones&nbsp;
+                    <span class="inline-block tooltip tooltip-top tooltip-warning lowercase" data-tip="¿Con cuantos cartones jugará?&#10;">
+                        <svg name="info" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path fill="currentColor" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13a6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2a1 1 0 0 1 0 2Z"/></svg>
+                    </span>
+                </small>
+                <select class="w-full rounded-lg leading-2 text-black ring-offset-2 ring-2 focus:ring-offset-2 focus:ring-2" 
+                    x-model="config.count_cartons"
+                >
+                    <option value="0" selected>...</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                </select>
             </div>
-        </div>
 
-        {{-- Selección automática --}}
-        <div>
-            <label class="mb-3 block text-sm font-semibold text-indigo-100">Selección automática</label>
-            <div class="grid grid-cols-2 gap-3">
-                <template x-for="option in [{label: 'Si', value: true}, {label: 'No', value: false}]" :key="'auto-selection-' + option.label">
-                    <button type="button"
-                            @click="config.auto_selection = option.value"
-                            :class="config.auto_selection === option.value
-                                ? 'bg-fuchsia-500 border-fuchsia-400 shadow-lg shadow-fuchsia-900/40'
-                                : 'bg-white/5 border-white/15 hover:bg-white/10'"
-                            class="rounded-xl border-2 px-4 py-3 text-sm font-bold transition">
-                        <span x-text="option.label"></span>
-                    </button>
-                </template>
+            <div class="flex flex-col items-start justify-center text-white font-thin pb-4">
+                <small class="uppercase">¿Selección automática?&nbsp;
+                    <span class="inline-block tooltip tooltip-top tooltip-warning lowercase" data-tip="Proximamente disponible&#10;">
+                        <svg name="info" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path fill="currentColor" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13a6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2a1 1 0 0 1 0 2Z"/></svg>
+                    </span>
+                </small>
+                <select class="w-full rounded-lg leading-2 text-black ring-offset-2 ring-2 focus:ring-offset-2 focus:ring-2" disabled>
+                    <option value="">...</option>
+                    <option value="No" title="Tu mism@ seleccionas las coincidencias en tu/s carton/es" selected>No</option>
+                    <option value="Si" title="Las coincidencias de bingo se seleccionarán automáticamente">Si</option>
+                </select>
             </div>
-        </div>
 
-        {{-- Series automáticas --}}
-        <div>
-            <label class="mb-3 block text-sm font-semibold text-indigo-100">Series automáticas</label>
-            <div class="grid grid-cols-2 gap-3">
-                <template x-for="option in [{label: 'Si', value: true}, {label: 'No', value: false}]" :key="'auto-series-' + option.label">
-                    <button type="button"
-                            @click="config.auto_series = option.value"
-                            :class="config.auto_series === option.value
-                                ? 'bg-fuchsia-500 border-fuchsia-400 shadow-lg shadow-fuchsia-900/40'
-                                : 'bg-white/5 border-white/15 hover:bg-white/10'"
-                            class="rounded-xl border-2 px-4 py-3 text-sm font-bold transition">
-                        <span x-text="option.label"></span>
-                    </button>
-                </template>
+            <div class="flex flex-col items-start justify-center text-white font-thin pb-4">
+                <small class="uppercase">¿Series automáticas?&nbsp;
+                    <span class="inline-block tooltip tooltip-top tooltip-warning lowercase" data-tip="Proximamente disponible&#10;">
+                        <svg name="info" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path fill="currentColor" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13a6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2a1 1 0 0 1 0 2Z"/></svg>
+                    </span>
+                </small>
+                <select class="w-full rounded-lg leading-2 text-black ring-offset-2 ring-2 focus:ring-offset-2 focus:ring-2" disabled>
+                    <option value="">...</option>
+                    <option value="No" title="Tendrás un boton para lanzar la proxima serie cuando desees" selected>No</option>
+                    <option value="Si" title="La series aparecerán automáticamente cada n segundos">Si</option>
+                </select>
             </div>
+
+            <div class="flex flex-row items-center justify-center text-white font-thin p-4 md:col-span-2">
+                <!-- <a href="{{ route('home') }}" class="border py-2 px-4 rounded-md hover:bg-white hover:text-black active:bg-white active:text-black mx-2" disabled>{{ __('Cancel') }}</a> -->
+                <button :class="ready() ? 'opacity-100 cursor-pointer' : 'opacity-25 cursor-not-allowed'" class="border py-2 px-4 rounded-md hover:bg-white hover:text-black active:bg-white active:text-black mx-2" x-bind:disabled="!ready()" x-on:click="getStart()">{{ __('Start') }}</button>
+            </div>
+
         </div>
-
-        {{-- Botón Iniciar Juego --}}
-        <button type="submit"
-                x-bind:disabled="!ready()" x-on:click="getStart()"
-                :class="!ready() ? 'opacity-50 cursor-not-allowed' : 'hover:bg-fuchsia-400 hover:-translate-y-0.5'"
-                class="group flex w-full items-center justify-center gap-2 rounded-2xl bg-fuchsia-500 px-8 py-4 text-lg font-bold text-white shadow-xl shadow-fuchsia-900/40 transition active:translate-y-0 focus:outline-none focus:ring-4 focus:ring-fuchsia-300/50">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M8 5v14l11-7L8 5z"/>
-            </svg>
-            Iniciar Juego
-        </button>
-
-        <p x-show="ready()" class="text-center text-xs text-fuchsia-200/80 -mt-4">
-            Configure un modo de juego para continuar.
-        </p>
-    </form>
+        
+    </div>
 
     <x-slot name="scripts">
 
@@ -320,9 +252,7 @@
                         //     }
                         // );
                     },
-                    getModes: function(context = null){
-
-                        if( !isNaN( parseInt( context ) ) ) this.config.context = context;
+                    getModes: function(){
                         this.config.submodes = [];
                         // Get Modes Depends on context change selected
                         fetch("/api/modes/"+this.config.context)
@@ -332,16 +262,14 @@
                             }
                         );
                     },
-                    getSubmodes: function(event, mode_id = null, mode_name = null){
+                    getSubmodes: function(event){
                         // Get Modes Depends on mode change selected
-                        if( !isNaN( parseInt( mode_id ) ) ) this.config.mode.id = mode_id;
                         this.config.submodes = [];
                         fetch("/api/submodes/"+this.config.mode.id)
                             .then(res => res.json())
                             .then(data => { 
                                 this.config.submodes = data;
-                                if(event) this.config.mode.name = event.target.options[event.target.options.selectedIndex].innerText;
-                                if(mode_name != null) this.config.mode.name = mode_name;
+                                this.config.mode.name = event.target.options[event.target.options.selectedIndex].innerText;
                             }
                         );
                     },
