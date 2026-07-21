@@ -4,7 +4,9 @@
 
 
 :root{
-    --color-primary: #610720;
+    /* --color-primary: #610720; */
+    --color-primary: rgb(217 70 239);
+    --color-primary-50: rgba(217 70 239, .5);
     --color-secondary: #4c0519;
     --color-tertiary: #C18C1A;
 }

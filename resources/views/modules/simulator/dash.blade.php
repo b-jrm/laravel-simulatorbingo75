@@ -83,11 +83,11 @@
         </div>
 
         <div class="z-10" x-show="storage === null">
-            <label class="mb-3 block text-sm font-semibold text-indigo-100">
+            <label class="mb-3 block text-sm font-semibold text-indigo-100 text-left">
                 {{ __('Tipo de bingo') }}
-                <span class="inline-block tooltip tooltip-top tooltip-warning lowercase" data-tip="{{ __('Seleccione el tipo de bingo que quiere jugar') }}&#10;">
+                <!-- <span class="inline-block tooltip tooltip-top tooltip-warning lowercase" data-tip="{{ __('Seleccione el tipo de bingo que quiere jugar') }}&#10;">
                     <svg name="info" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path fill="currentColor" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13a6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2a1 1 0 0 1 0 2Z"/></svg>
-                </span>
+                </span> -->
             </label>
             <div class="grid grid-cols-2 gap-3">
                 <template x-for="context in dash.contexts" :key="context.context_id">
@@ -104,9 +104,9 @@
         </div>
 
         {{-- Modos ganadores --}}
-        <div>
-            <label class="mb-3 block text-sm font-semibold text-indigo-100">
-                {{ __('Modos ganadores') }}
+        <div x-show="dash.modes.length > 0">
+            <label class="mb-3 block text-sm font-semibold text-indigo-100 text-left">
+                {{ __('Modo ganador') }}
             </label>
             <div class="grid grid-cols-2 gap-2">
                 <template x-for="mode in dash.modes" :key="mode.mode_id">
@@ -128,37 +128,80 @@
                     </label>
                 </template>
             </div>
-            <p class="mt-2 text-xs text-indigo-200/60">Puedes elegir uno o varios modos de victoria.</p>
-            <div class="flex flex-row items-start text-white font-thin pb-4 col-span-1 md:col-span-2 lg:col-span-4 p-4 text-center overflow-x-auto border border-yellow border-b-0 bg-gray-200 bg-opacity-20" x-show="config.submodes.length">
-                <!-- <Objetive v-bind:types="game.mode"></Objetive> -->
-                <!-- <p>Modos Ganadores Seleccionados</p> -->
-                <template x-for="submode in config.submodes">
-                    <div class="flex flex-col items-center mx-3">
-                        <!-- <p class="block text-center text-white text-[12px]" x-text="submode.name"></p> -->
-                        <div class="w-[80px] h-[80px] bg-gray-400 rounded-md p-1 flex flex-row items-center justify-center">
 
-                            <template x-for="col in submode.columns">
-                                <div class="flex flex-col items-center justify-center">
+            <div x-show="dash.submodes.length">
+                <p class="my-2 text-md text-indigo-200/60 flex justify-around">
+                    <!-- Puedes elegir uno o varios modos de victoria. -->
+                    {{ __('Puedes elegir uno o varios modos de victoria') }}
+                    &nbsp;
+                    <!-- Optional a futuro -->
+                    <!-- <label class="relative inline-flex cursor-pointer items-center">
+                        <input
+                            type="checkbox"
+                            class="peer sr-only">
 
-                                    <template x-for="row in submode.rows">
+                        <div class="h-8 w-14 rounded-full bg-indigo-500 transition-colors duration-300
+                                    peer-checked:bg-indigo-500
+                                    peer-not-checked:bg-gray-300">
 
-                                        <div :class="(submode.coordinates.findIndex(coord => coord.x == (col-1) && coord.y == (row-1) ) > -1) ? 'bg-gray-800' : 'bg-gray-100'" class="p-[5px] mb-1 mr-1 rounded-sm"></div>
-                                        
-                                    </template>
+                            <div class="absolute left-0.5 top-0.5 h-7 w-7 rounded-full bg-white shadow-md
+                                        transition-transform duration-300
+                                        peer-checked:translate-x-6">
+                            </div>
 
-                                </div>
-                            </template>
-                            
                         </div>
-                    </div>
-                </template>
-                
+                    </label> -->
+                </p>
+                <div class="flex flex-row items-start text-white font-thin pb-4 col-span-1 md:col-span-2 lg:col-span-4 p-4 text-center overflow-x-auto bg-gray-200 bg-opacity-20">
+                    <!-- <Objetive v-bind:types="game.mode"></Objetive> -->
+                    <!-- <p>Modos Ganadores Seleccionados</p> -->
+                    <template x-for="submode in dash.submodes" :key="submode.submode_id">
+                        <div class="relative flex flex-col items-center mx-3">
+                            <!-- <p class="block text-center text-white text-[12px]" x-text="submode.name"></p> -->
+
+                            <span x-show="config.submodes.find(ConfigSubmode => ConfigSubmode.submode_id === submode.submode_id)" class="flex items-center justify-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20" @click="setSubmodes(submode.submode_id, true)">
+                                {{-- Chulo de seleccionado --}}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 48 48">
+                                    <path d="M0 0h48v48H0z" fill="none" />
+                                    <circle cx="24" cy="24" r="21" fill="#4CAF50" />
+                                    <path fill="#CCFF90" d="M34.6 14.6L21 28.2l-5.6-5.6l-2.8 2.8l8.4 8.4l16.4-16.4z" />
+                                </svg>
+                            </span>
+
+                            <a href="#" @click.prevent="setSubmodes(submode.submode_id)" 
+                                class="block w-[80px] h-[80px] bg-gray-400 rounded-md p-1 flex flex-row items-center justify-center">
+
+                                <template x-for="col in submode.columns">
+                                    <div class="flex flex-col items-center justify-center">
+
+                                        <template x-for="row in submode.rows">
+
+                                            <div :class="(submode.coordinates.findIndex(coord => coord.x == (col-1) && coord.y == (row-1) ) > -1) ? 'bg-gray-800' : 'bg-gray-100'" class="p-[5px] mb-1 mr-1 rounded-sm"></div>
+                                            
+                                        </template>
+
+                                    </div>
+                                </template>
+                                
+                            </a>
+                        </div>
+                    </template>
+                    
+                </div>
             </div>
+        </div>
+
+        <div x-show="dash.modes.length === 0">
+            {{ __('No hay modos ganadores actualmente') }}.
+            <br>
+            {{ __('Seleccione otro tipo de bingo') }}.
         </div>
 
         {{-- Cantidad de cartones --}}
         <div>
-            <label class="mb-3 block text-sm font-semibold text-indigo-100">Cantidad de cartones</label>
+            <label class="mb-3 block text-sm font-semibold text-indigo-100 text-left">
+                {{ __('Cantidad de cartones') }}
+            </label>
             <div class="grid grid-cols-4 gap-3">
                 <template x-for="n in [1,2,3,4]" :key="n">
                     <button type="button"
@@ -173,9 +216,10 @@
             </div>
         </div>
 
-        {{-- Selección automática --}}
         <div>
-            <label class="mb-3 block text-sm font-semibold text-indigo-100">Selección automática</label>
+            <label class="mb-3 block text-sm font-semibold text-indigo-100 text-left">
+                {{ __('Selección automática') }}
+            </label>
             <div class="grid grid-cols-2 gap-3">
                 <template x-for="option in [{label: 'Si', value: true}, {label: 'No', value: false}]" :key="'auto-selection-' + option.label">
                     <button type="button"
@@ -190,9 +234,10 @@
             </div>
         </div>
 
-        {{-- Series automáticas --}}
         <div>
-            <label class="mb-3 block text-sm font-semibold text-indigo-100">Series automáticas</label>
+            <label class="mb-3 block text-sm font-semibold text-indigo-100 text-left">
+                {{ __('Series automáticas') }}
+            </label>
             <div class="grid grid-cols-2 gap-3">
                 <template x-for="option in [{label: 'Si', value: true}, {label: 'No', value: false}]" :key="'auto-series-' + option.label">
                     <button type="button"
@@ -232,6 +277,8 @@
                     dash: {
                         contexts: [],
                         modes: [],
+                        submodes: [],
+                        cartons: [],
                     },
                     storage: null,
                     cookie: null,
@@ -323,7 +370,7 @@
                     getModes: function(context = null){
 
                         if( !isNaN( parseInt( context ) ) ) this.config.context = context;
-                        this.config.submodes = [];
+                        this.dash.submodes = [];
                         // Get Modes Depends on context change selected
                         fetch("/api/modes/"+this.config.context)
                             .then(res => res.json())
@@ -335,22 +382,44 @@
                     getSubmodes: function(event, mode_id = null, mode_name = null){
                         // Get Modes Depends on mode change selected
                         if( !isNaN( parseInt( mode_id ) ) ) this.config.mode.id = mode_id;
-                        this.config.submodes = [];
+                        this.dash.submodes = this.config.submodes = [];
                         fetch("/api/submodes/"+this.config.mode.id)
                             .then(res => res.json())
                             .then(data => { 
-                                this.config.submodes = data;
+                                this.dash.submodes = data;
                                 if(event) this.config.mode.name = event.target.options[event.target.options.selectedIndex].innerText;
                                 if(mode_name != null) this.config.mode.name = mode_name;
                             }
                         );
+                    },
+                    setSubmodes: function(submode_id = null, remove = false){
+                        // Config dash.submodes --> config.submodes
+                        // console.log("param_submode_id",submode_id);
+                        // if( this.config.submodes.length ){
+                            const findSubmode = this.config.submodes.find(sub => sub.submode_id === submode_id);
+
+                            if(!findSubmode && !remove){
+                                // No Existe, Se agrega
+                                this.config.submodes.push(
+                                    this.dash.submodes.find(submode => submode.submode_id === submode_id)
+                                );
+                            }
+
+                            if( findSubmode && remove ){
+                                // Existe, se quita 
+                                this.config.submodes = this.config.submodes.filter(submode => submode.submode_id !== submode_id);
+                            }
+
+                        // }
                     },
                     ready: function(){
                         return (
                             this.config.context > 0 && 
                             this.config.mode.id > 0 && 
                             this.config.submodes.length > 0 && 
-                            this.config.count_cartons > 0
+                            this.config.count_cartons > 0 
+                            // this.config.auto_selection > 0 && 
+                            // this.config.auto_series > 0 
                         );
                     },
                     getStart: function(){
