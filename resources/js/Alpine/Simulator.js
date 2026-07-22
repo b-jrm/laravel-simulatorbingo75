@@ -23,7 +23,7 @@ document.addEventListener('alpine:init', () => {
                 status: 0,
                 process: 'Loading game ...',
             },
-            config: {
+            setting: {
                 section: {
                     screen: {
                         height: 0,
@@ -115,21 +115,21 @@ document.addEventListener('alpine:init', () => {
             loading(){
 
                 // console.log("screen.width",screen.width);
-                this.config.section.screen.width = screen.width;
+                this.setting.section.screen.width = screen.width;
                 // console.log(navigator.userAgent);
 
                 if( !this.isMobile() )
                 {
-                    this.config.section.board.enabled = true;
-                    this.config.section.board.extended = false;
-                    this.config.section.submodes.enabled = true;
-                    this.config.section.submodes.extended = false;
+                    this.setting.section.board.enabled = true;
+                    this.setting.section.board.extended = false;
+                    this.setting.section.submodes.enabled = true;
+                    this.setting.section.submodes.extended = false;
                 }
 
-                this.config.storage = localStorage.getItem('simulator');
+                this.setting.storage = localStorage.getItem('simulator');
 
-                for (let load = 0; load < this.config.module.length; load++) {
-                    this.progress.process = "Loading "+this.config.module[load]+" ...";
+                for (let load = 0; load < this.setting.module.length; load++) {
+                    this.progress.process = "Loading "+this.setting.module[load]+" ...";
                     fetch(
                         "loading",
                         {
@@ -139,13 +139,13 @@ document.addEventListener('alpine:init', () => {
                                 'Content-Type': 'application/json',
                                 'X-CSRF-TOKEN': document.head.querySelector('meta[name=csrf-token]').content
                             },
-                            body: JSON.stringify({ storage: this.config.storage, module: this.config.module[load] })
+                            body: JSON.stringify({ storage: this.setting.storage, module: this.setting.module[load] })
                         }
                     ).then( res => res.json() )
                     .then( build => {
-                        // console.log("module-"+this.config.module[load],build);
-                        this[this.config.module[load]] = build;
-                        this.progress.status += ( 100 / this.config.module.length );
+                        // console.log("module-"+this.setting.module[load],build);
+                        this[this.setting.module[load]] = build;
+                        this.progress.status += ( 100 / this.setting.module.length );
                     });
                 }
 
@@ -176,10 +176,10 @@ document.addEventListener('alpine:init', () => {
 
                 this.loading();
                 
-                // this.config.sound.bolillero.audio = 'bolillero.mp3'
+                // this.setting.sound.bolillero.audio = 'bolillero.mp3'
                 // setInterval(() => {
-                //     this.config.sound.bolillero.audio = ''
-                //     this.config.sound.bolillero.audio = 'bolillero.mp3'
+                //     this.setting.sound.bolillero.audio = ''
+                //     this.setting.sound.bolillero.audio = 'bolillero.mp3'
                 // }, 30000);
 
                 // console.log("start function");
@@ -284,17 +284,17 @@ document.addEventListener('alpine:init', () => {
                     if( indexRank >= 0) this.ranks.splice(indexRank,1);
                     // console.log('ranks',this.ranks);
                     this.markerBoard(number)
-                    this.config.sound.shot.audio = 'shot.mp3';
+                    this.setting.sound.shot.audio = 'shot.mp3';
                     this.inRound = true;
-                    if(this.config.sound.bolillero.volume <= 0)
-                        this.config.sound.bolillero.audio = '';
+                    if(this.setting.sound.bolillero.volume <= 0)
+                        this.setting.sound.bolillero.audio = '';
                     setTimeout(() => {
                         this.sequence.push(newRound)
-                        this.config.sound.serie.audio = serie
-                        this.config.sound.shot.audio = ''
+                        this.setting.sound.serie.audio = serie
+                        this.setting.sound.shot.audio = ''
                         this.inRound = false;
-                        if(this.config.sound.bolillero.volume > 0){
-                            this.config.sound.bolillero.audio = 'bolillero.mp3';
+                        if(this.setting.sound.bolillero.volume > 0){
+                            this.setting.sound.bolillero.audio = 'bolillero.mp3';
                             this.setVolume('bolillero');
                         }
                         this.sync(['board', 'ranks', 'sequence']);
@@ -336,7 +336,7 @@ document.addEventListener('alpine:init', () => {
                 return {
                     letter: letter,
                     number: number,
-                    color: this.config.color.class[(Math.floor(Math.random() * this.config.color.class.length))]
+                    color: this.setting.color.class[(Math.floor(Math.random() * this.setting.color.class.length))]
                 }
             },
             // Player Event Click In Serie From Carton
@@ -349,10 +349,10 @@ document.addEventListener('alpine:init', () => {
             bingo(){
                 // console.log("Bingo-submodes",this.submodes);
                 // console.log("Bingo-cartons",this.cartons);
-                this.config.checking.status = true;
+                this.setting.checking.status = true;
                 let count;
                 let completed;
-                this.config.checking.wins = [];
+                this.setting.checking.wins = [];
                 this.submodes.forEach(submode => {
                     // console.log("submode",submode);
                     for (const number in this.cartons) {
@@ -376,17 +376,17 @@ document.addEventListener('alpine:init', () => {
                                     completed = (count == submode.coordinates.length);
                                     if(completed){
                                         this.cartons[number][letter][serie].is_win = true;
-                                        let index_carton = this.config.checking.wins.findIndex( win => win.carton === number );
+                                        let index_carton = this.setting.checking.wins.findIndex( win => win.carton === number );
                                         // console.log("index_carton",index_carton);
                                         if( index_carton > -1 ){
 
-                                            this.config.checking.wins[index_carton].coords = this.config.checking.wins[index_carton].coords.concat(submode.coordinates);
-                                            this.config.checking.wins[index_carton].count++;
-                                            // this.config.checking.wins[index_carton].coords.push(
+                                            this.setting.checking.wins[index_carton].coords = this.setting.checking.wins[index_carton].coords.concat(submode.coordinates);
+                                            this.setting.checking.wins[index_carton].count++;
+                                            // this.setting.checking.wins[index_carton].coords.push(
                                             //     { id: submode.submode_id, coords: submode.coordinates }
                                             // );
                                         }else{
-                                            this.config.checking.wins.push({
+                                            this.setting.checking.wins.push({
                                                 carton: number,
                                                 coords: submode.coordinates,
                                                 count: 1,
@@ -399,13 +399,13 @@ document.addEventListener('alpine:init', () => {
                     } // End for
 
                 });
-                // console.log("this.config.checking.wins (simulator)",this.config.checking.wins);
-                if(this.config.checking.wins.length > 0){
-                    this.config.sound.win.audio = 'winner_male.mp3';
-                    this.config.sound.celebration.audio = 'pyrotechnics.mp3';
+                // console.log("this.setting.checking.wins (simulator)",this.setting.checking.wins);
+                if(this.setting.checking.wins.length > 0){
+                    this.setting.sound.win.audio = 'winner_male.mp3';
+                    this.setting.sound.celebration.audio = 'pyrotechnics.mp3';
                 }else{
-                    this.config.sound.celebration.audio = '';
-                    this.config.sound.win.audio = 'losser_male.mp3';
+                    this.setting.sound.celebration.audio = '';
+                    this.setting.sound.win.audio = 'losser_male.mp3';
                 }
                        
 
@@ -426,28 +426,28 @@ document.addEventListener('alpine:init', () => {
                 location.href = "/simulator";
             },
             save(){
-                console.log("Save data", this.config.checking.wins);
-                this.config.checking.status = false;
+                console.log("Save data", this.setting.checking.wins);
+                this.setting.checking.status = false;
             },
             setVolume(audio){
                 var soundTag = document.getElementById(audio);
                 if(soundTag){
-                    if(this.config.sound[audio].volume > 0 && this.config.sound.bolillero.audio == ''){
-                        this.config.sound.bolillero.audio = audio+'.mp3';
+                    if(this.setting.sound[audio].volume > 0 && this.setting.sound.bolillero.audio == ''){
+                        this.setting.sound.bolillero.audio = audio+'.mp3';
                         soundTag.play();
                     }
-                    soundTag.volume = this.config.sound[audio].volume;
+                    soundTag.volume = this.setting.sound[audio].volume;
                 }
             },
             toggleVolume(audio){
-                this.config.sound[audio].volume = ((this.config.sound[audio].volume > 0) ? 0 : 1);
+                this.setting.sound[audio].volume = ((this.setting.sound[audio].volume > 0) ? 0 : 1);
                 this.setVolume(audio);
             },
             toggleView(name){
-                // Object.keys(this.config.section).forEach(sec => {
-                //     if( sec != name  ) this.config.section[sec].extended = false;
+                // Object.keys(this.setting.section).forEach(sec => {
+                //     if( sec != name  ) this.setting.section[sec].extended = false;
                 // });
-                this.config.section[name].extended = !this.config.section[name].extended;
+                this.setting.section[name].extended = !this.setting.section[name].extended;
             }
         })
     );

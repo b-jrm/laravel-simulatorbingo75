@@ -22,6 +22,7 @@ use App\Http\Traits\Bingo75;
 
 Route::get('/', [GuestController::class, 'home'])->name('home');
 Route::get('/home', [GuestController::class, 'render'])->name('renderHome');
+Route::get('/rebote', [GuestController::class, 'rebote'])->name('renderRebote');
 
 Route::get('/support', [GuestController::class, 'home'])->name('support');
 

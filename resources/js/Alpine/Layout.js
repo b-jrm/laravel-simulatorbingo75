@@ -32,6 +32,8 @@ document.addEventListener('alpine:init', () => {
                         if(left) left += document.querySelector(el).scrollLeft;
                         if(top) top += document.querySelector(el).scrollTop;
                     }
+                    // console.log("moveScroll","top-"+top);
+                    // console.log("moveScroll","left-"+left);
                     document.querySelector(el).scroll({
                         top: top,
                         left: left,

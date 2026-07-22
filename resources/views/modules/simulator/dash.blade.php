@@ -457,7 +457,7 @@
                                     this.progress.status = 0;
                                     location.href = "/simulator/game?_st="+this.storage;
                                 }
-                            }, 10);
+                            }, 30);
                         }
                     },
                     namespaced: true,

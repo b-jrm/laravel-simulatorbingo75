@@ -29,4 +29,11 @@ class GuestController extends Controller
         ]);
     }
 
+    public function rebote(Request $request): View
+    {
+        return view('modules.home.rebote', [
+            'user' => $request->user(),
+        ]);
+    }
+
 }
