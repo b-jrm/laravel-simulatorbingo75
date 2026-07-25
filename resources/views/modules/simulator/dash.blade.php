@@ -17,50 +17,34 @@
     </x-slot>
 
     <!-- <x-slot name="header"></x-slot> -->
+    <div x-data="ConfigSimulator()" x-init="form()" class="flex flex-col items-center justify-center mx-auto px-6 py-8 text-center">
 
-    <div class="pointer-events-none fixed inset-0 overflow-hidden opacity-30">
-        <template x-for="ball in balls" :key="ball.id">
-            <div
-                class="absolute rounded-full bg-white/90 text-indigo-900 font-extrabold flex items-center justify-center shadow-lg animate-float"
-                :style="`left: ${ball.left}%; width: ${ball.size}px; height: ${ball.size}px; font-size: ${ball.size/2.5}px; animation-delay: ${ball.delay}s; animation-duration: ${ball.duration}s;`"
-                x-text="ball.num"
-            ></div>
-        </template>
-    </div>
-
-    <div class="w-full max-w-lg text-center mb-8">
-        <span class="mb-3 inline-block rounded-full bg-white/10 px-4 py-1 text-sm font-medium tracking-wide text-fuchsia-200 backdrop-blur">
-            Configura tu partida
-        </span>
-        <h1 class="text-4xl sm:text-5xl font-black tracking-tight drop-shadow-lg">
-            Simulador de <span class="text-fuchsia-400">Bingo</span>
-        </h1>
-    </div>
-
-    <!--  method="POST" action="{{ route('simulator') }}" -->
-    <form x-data="ConfigSimulator()" x-init="form()"
-            class="w-full max-w-lg rounded-3xl border border-white/10 bg-white/5 p-6 sm:p-8 shadow-2xl backdrop-blur-md space-y-8">
-        @csrf
-
-        <div class="w-full h-full absolute top-0 left-0 flex flex-col items-center justify-center text-[15px] text-white font-thin z-20" x-show="progress.status > 0 && progress.status < 100">
-            
-            <div class="mb-1 text-base font-medium text-purple-700 dark:text-white text-left flex flex-row flex-nowrap w-3/5 pl-1">
-                <p>&#10140;</p>&nbsp;<p class="text-[14px] font-thin" x-text="progress.process">Loading ...</p>
-            </div>
-            <div class="w-3/5 bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-                <div class="bg-white h-2.5 rounded-full dark:bg-white" x-bind:style="'width: '+progress.status+'%'"></div>
-            </div>
-            
+        <div class="pointer-events-none fixed inset-0 overflow-hidden opacity-30">
+            <template x-for="ball in balls" :key="ball.id">
+                <div
+                    class="absolute rounded-full bg-white/90 text-indigo-900 font-extrabold flex items-center justify-center shadow-lg animate-float"
+                    :style="`left: ${ball.left}%; width: ${ball.size}px; height: ${ball.size}px; font-size: ${ball.size/2.5}px; animation-delay: ${ball.delay}s; animation-duration: ${ball.duration}s;`"
+                    x-text="ball.num"
+                ></div>
+            </template>
         </div>
 
-        <div class="w-full h-full absolute top-0 left-0 bg-gradient-to-br from-indigo-950 via-purple-900 to-fuchsia-900 flex flex-col items-center gap-6 text-[15px] text-white font-thin z-20" x-show="storage !== null">
-            <h1 class="text-5xl sm:text-6xl md:text-7xl font-black tracking-tight drop-shadow-lg">
-                Partida<span class="text-fuchsia-400">Sin terminar</span>
+        <div class="w-full max-w-lg text-center mb-8">
+            <span class="mb-3 inline-block rounded-full bg-white/10 px-4 py-1 text-sm font-medium tracking-wide text-fuchsia-200 backdrop-blur">
+                Configura tu partida
+            </span>
+            <h1 class="text-4xl sm:text-5xl font-black tracking-tight drop-shadow-lg">
+                Simulador de <span class="text-fuchsia-400">Bingo</span>
+            </h1>
+        </div>
+
+        <div class="flex flex-col items-center gap-6 text-[15px] text-white font-thin z-20" x-show="storage !== null">
+            <h1 class="text-5xl sm:text-6xl md:text-7xl font-black tracking-tight drop-shadow-lg m-2">
+                <span class="text-fuchsia-400">Tiene una</span> Partida <span class="text-fuchsia-400">Sin terminar</span>
             </h1>
             <span class="mb-3 inline-block rounded-full bg-white/10 px-4 py-1 text-sm font-medium tracking-wide text-fuchsia-200 backdrop-blur">
-                ¿Desea continuar?
+                ¿Desea continuarla?
             </span>
-
             <div class="grid grid-cols-2 gap-3">
                 <button type="button" x-on:click="continueGame()"
                     class="inline-flex items-center justify-center gap-2 rounded-2xl border-2 border-white/40 bg-white/5 px-8 py-4 text-lg font-bold text-white backdrop-blur transition hover:bg-fuchsia-400 hover:-translate-y-0.5 active:translate-y-0 focus:outline-none focus:ring-4 focus:ring-fuchsia-300/50">
@@ -79,194 +63,211 @@
                     No
                 </button>
             </div>
-            
         </div>
 
-        <div class="z-10" x-show="storage === null">
-            <label class="mb-3 block text-sm font-semibold text-indigo-100 text-left">
-                {{ __('Tipo de bingo') }}
-                <!-- <span class="inline-block tooltip tooltip-top tooltip-warning lowercase" data-tip="{{ __('Seleccione el tipo de bingo que quiere jugar') }}&#10;">
-                    <svg name="info" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path fill="currentColor" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13a6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2a1 1 0 0 1 0 2Z"/></svg>
-                </span> -->
-            </label>
-            <div class="grid grid-cols-2 gap-3">
-                <template x-for="context in dash.contexts" :key="context.context_id">
-                     <button type="button"
-                            x-on:click="getModes(context.context_id)"
-                            :class="config.context === context.context_id
-                                ? 'bg-fuchsia-500 border-fuchsia-400 shadow-lg shadow-fuchsia-900/40'
-                                : 'bg-white/5 border-white/15 hover:bg-white/10'"
-                            class="rounded-xl border-2 px-4 py-3 text-sm font-bold transition">
-                        <span x-text="context.name"></span>
-                    </button>
-                </template>
-            </div>
-        </div>
+        <!--  method="POST" action="{{ route('simulator') }}" -->
+        <form x-show="storage === null"
+                class="w-full max-w-lg rounded-3xl border border-white/10 bg-white/5 p-6 sm:p-8 shadow-2xl backdrop-blur-md space-y-8">
+            @csrf
 
-        {{-- Modos ganadores --}}
-        <div x-show="dash.modes.length > 0">
-            <label class="mb-3 block text-sm font-semibold text-indigo-100 text-left">
-                {{ __('Modo ganador') }}
-            </label>
-            <div class="grid grid-cols-2 gap-2">
-                <template x-for="mode in dash.modes" :key="mode.mode_id">
-                    <label
-                        :class="mode.mode_id == config.mode.id
-                            ? 'bg-fuchsia-500/90 border-fuchsia-400'
-                            : 'bg-white/5 border-white/15 hover:bg-white/10'"
-                        class="flex cursor-pointer items-center gap-2 rounded-xl border-2 px-3 py-2.5 text-sm font-medium transition select-none">
-                        <input type="radio"
-                            :value="mode.mode_id"
-                            x-model="config.mode.id"
-                            x-on:click="getSubmodes(null, mode.mode_id, mode.name)"
-                            class="sr-only"
-                        >
-                        <svg x-show="mode.mode_id == config.mode.id" class="h-4 w-4 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                        </svg>
-                        <span x-text="mode.name"></span>
-                    </label>
-                </template>
+            <div class="w-full h-full absolute top-0 left-0 flex flex-col items-center justify-center text-[15px] text-white font-thin z-20" x-show="progress.status > 0 && progress.status < 100">
+                
+                <div class="mb-1 text-base font-medium text-purple-700 dark:text-white text-left flex flex-row flex-nowrap w-3/5 pl-1">
+                    <p>&#10140;</p>&nbsp;<p class="text-[14px] font-thin" x-text="progress.process">Loading ...</p>
+                </div>
+                <div class="w-3/5 bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                    <div class="bg-white h-2.5 rounded-full dark:bg-white" x-bind:style="'width: '+progress.status+'%'"></div>
+                </div>
+                
             </div>
 
-            <div x-show="dash.submodes.length">
-                <p class="my-2 text-md text-indigo-200/60 flex justify-around">
-                    <!-- Puedes elegir uno o varios modos de victoria. -->
-                    {{ __('Puedes elegir uno o varios modos de victoria') }}
-                    &nbsp;
-                    <!-- Optional a futuro -->
-                    <!-- <label class="relative inline-flex cursor-pointer items-center">
-                        <input
-                            type="checkbox"
-                            class="peer sr-only">
-
-                        <div class="h-8 w-14 rounded-full bg-indigo-500 transition-colors duration-300
-                                    peer-checked:bg-indigo-500
-                                    peer-not-checked:bg-gray-300">
-
-                            <div class="absolute left-0.5 top-0.5 h-7 w-7 rounded-full bg-white shadow-md
-                                        transition-transform duration-300
-                                        peer-checked:translate-x-6">
-                            </div>
-
-                        </div>
-                    </label> -->
-                </p>
-                <div class="flex flex-row items-start text-white font-thin pb-4 col-span-1 md:col-span-2 lg:col-span-4 p-4 text-center overflow-x-auto bg-gray-200 bg-opacity-20">
-                    <!-- <Objetive v-bind:types="game.mode"></Objetive> -->
-                    <!-- <p>Modos Ganadores Seleccionados</p> -->
-                    <template x-for="submode in dash.submodes" :key="submode.submode_id">
-                        <div class="relative flex flex-col items-center mx-3">
-                            <!-- <p class="block text-center text-white text-[12px]" x-text="submode.name"></p> -->
-
-                            <span x-show="config.submodes.find(ConfigSubmode => ConfigSubmode.submode_id === submode.submode_id)" class="flex items-center justify-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20" @click="setSubmodes(submode.submode_id, true)">
-                                {{-- Chulo de seleccionado --}}
-                                <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 48 48">
-                                    <path d="M0 0h48v48H0z" fill="none" />
-                                    <circle cx="24" cy="24" r="21" fill="#4CAF50" />
-                                    <path fill="#CCFF90" d="M34.6 14.6L21 28.2l-5.6-5.6l-2.8 2.8l8.4 8.4l16.4-16.4z" />
-                                </svg>
-                            </span>
-
-                            <a href="#" @click.prevent="setSubmodes(submode.submode_id)" 
-                                class="block w-[80px] h-[80px] bg-gray-400 rounded-md p-1 flex flex-row items-center justify-center">
-
-                                <template x-for="col in submode.columns">
-                                    <div class="flex flex-col items-center justify-center">
-
-                                        <template x-for="row in submode.rows">
-
-                                            <div :class="(submode.coordinates.findIndex(coord => coord.x == (col-1) && coord.y == (row-1) ) > -1) ? 'bg-gray-800' : 'bg-gray-100'" class="p-[5px] mb-1 mr-1 rounded-sm"></div>
-                                            
-                                        </template>
-
-                                    </div>
-                                </template>
-                                
-                            </a>
-                        </div>
+            <div class="z-10">
+                <label class="mb-3 block text-sm font-semibold text-indigo-100 text-left">
+                    {{ __('Tipo de bingo') }}
+                    <!-- <span class="inline-block tooltip tooltip-top tooltip-warning lowercase" data-tip="{{ __('Seleccione el tipo de bingo que quiere jugar') }}&#10;">
+                        <svg name="info" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path fill="currentColor" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13a6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2a1 1 0 0 1 0 2Z"/></svg>
+                    </span> -->
+                </label>
+                <div class="grid grid-cols-2 gap-3">
+                    <template x-for="context in dash.contexts" :key="context.context_id">
+                        <button type="button"
+                                x-on:click="getModes(context.context_id)"
+                                :class="config.context === context.context_id
+                                    ? 'bg-fuchsia-500 border-fuchsia-400 shadow-lg shadow-fuchsia-900/40'
+                                    : 'bg-white/5 border-white/15 hover:bg-white/10'"
+                                class="rounded-xl border-2 px-4 py-3 text-sm font-bold transition">
+                            <span x-text="context.name"></span>
+                        </button>
                     </template>
-                    
                 </div>
             </div>
-        </div>
 
-        <div x-show="dash.modes.length === 0">
-            {{ __('No hay modos ganadores actualmente') }}.
-            <br>
-            {{ __('Seleccione otro tipo de bingo') }}.
-        </div>
-
-        {{-- Cantidad de cartones --}}
-        <div>
-            <label class="mb-3 block text-sm font-semibold text-indigo-100 text-left">
-                {{ __('Cantidad de cartones') }}
-            </label>
-            <div class="grid grid-cols-4 gap-3">
-                <template x-for="n in [1,2,3,4]" :key="n">
-                    <button type="button"
-                            @click="config.count_cartons = n"
-                            :class="config.count_cartons === n
-                                ? 'bg-fuchsia-500 border-fuchsia-400 shadow-lg shadow-fuchsia-900/40'
+            {{-- Modos ganadores --}}
+            <div x-show="dash.modes.length > 0">
+                <label class="mb-3 block text-sm font-semibold text-indigo-100 text-left">
+                    {{ __('Modo ganador') }}
+                </label>
+                <div class="grid grid-cols-2 gap-2">
+                    <template x-for="mode in dash.modes" :key="mode.mode_id">
+                        <label
+                            :class="mode.mode_id == config.mode.id
+                                ? 'bg-fuchsia-500/90 border-fuchsia-400'
                                 : 'bg-white/5 border-white/15 hover:bg-white/10'"
-                            class="rounded-xl border-2 py-3 text-lg font-bold transition">
-                        <span x-text="n"></span>
-                    </button>
-                </template>
+                            class="flex cursor-pointer items-center gap-2 rounded-xl border-2 px-3 py-2.5 text-sm font-medium transition select-none">
+                            <input type="radio"
+                                :value="mode.mode_id"
+                                x-model="config.mode.id"
+                                x-on:click="getSubmodes(null, mode.mode_id, mode.name)"
+                                class="sr-only"
+                            >
+                            <svg x-show="mode.mode_id == config.mode.id" class="h-4 w-4 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                            </svg>
+                            <span x-text="mode.name"></span>
+                        </label>
+                    </template>
+                </div>
+
+                <div x-show="dash.submodes.length">
+                    <p class="my-2 text-md text-indigo-200/60 flex justify-around">
+                        <!-- Puedes elegir uno o varios modos de victoria. -->
+                        {{ __('Puedes elegir uno o varios modos de victoria') }}
+                        &nbsp;
+                        <!-- Optional a futuro -->
+                        <!-- <label class="relative inline-flex cursor-pointer items-center">
+                            <input
+                                type="checkbox"
+                                class="peer sr-only">
+
+                            <div class="h-8 w-14 rounded-full bg-indigo-500 transition-colors duration-300
+                                        peer-checked:bg-indigo-500
+                                        peer-not-checked:bg-gray-300">
+
+                                <div class="absolute left-0.5 top-0.5 h-7 w-7 rounded-full bg-white shadow-md
+                                            transition-transform duration-300
+                                            peer-checked:translate-x-6">
+                                </div>
+
+                            </div>
+                        </label> -->
+                    </p>
+                    <div class="flex flex-row items-start text-white font-thin pb-4 col-span-1 md:col-span-2 lg:col-span-4 p-4 text-center overflow-x-auto bg-gray-200 bg-opacity-20">
+                        <!-- <Objetive v-bind:types="game.mode"></Objetive> -->
+                        <!-- <p>Modos Ganadores Seleccionados</p> -->
+                        <template x-for="submode in dash.submodes" :key="submode.submode_id">
+                            <div class="relative flex flex-col items-center mx-3">
+                                <!-- <p class="block text-center text-white text-[12px]" x-text="submode.name"></p> -->
+
+                                <span x-show="config.submodes.find(ConfigSubmode => ConfigSubmode.submode_id === submode.submode_id)" class="flex items-center justify-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20" @click="setSubmodes(submode.submode_id, true)">
+                                    {{-- Chulo de seleccionado --}}
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 48 48">
+                                        <path d="M0 0h48v48H0z" fill="none" />
+                                        <circle cx="24" cy="24" r="21" fill="#4CAF50" />
+                                        <path fill="#CCFF90" d="M34.6 14.6L21 28.2l-5.6-5.6l-2.8 2.8l8.4 8.4l16.4-16.4z" />
+                                    </svg>
+                                </span>
+
+                                <a href="#" @click.prevent="setSubmodes(submode.submode_id)" 
+                                    class="block w-[80px] h-[80px] bg-gray-400 rounded-md p-1 flex flex-row items-center justify-center">
+
+                                    <template x-for="col in submode.columns">
+                                        <div class="flex flex-col items-center justify-center">
+
+                                            <template x-for="row in submode.rows">
+
+                                                <div :class="(submode.coordinates.findIndex(coord => coord.x == (col-1) && coord.y == (row-1) ) > -1) ? 'bg-gray-800' : 'bg-gray-100'" class="p-[5px] mb-1 mr-1 rounded-sm"></div>
+                                                
+                                            </template>
+
+                                        </div>
+                                    </template>
+                                    
+                                </a>
+                            </div>
+                        </template>
+                        
+                    </div>
+                </div>
             </div>
-        </div>
 
-        <div>
-            <label class="mb-3 block text-sm font-semibold text-indigo-100 text-left">
-                {{ __('Selección automática') }}
-            </label>
-            <div class="grid grid-cols-2 gap-3">
-                <template x-for="option in [{label: 'Si', value: true}, {label: 'No', value: false}]" :key="'auto-selection-' + option.label">
-                    <button type="button"
-                            @click="config.auto_selection = option.value"
-                            :class="config.auto_selection === option.value
-                                ? 'bg-fuchsia-500 border-fuchsia-400 shadow-lg shadow-fuchsia-900/40'
-                                : 'bg-white/5 border-white/15 hover:bg-white/10'"
-                            class="rounded-xl border-2 px-4 py-3 text-sm font-bold transition">
-                        <span x-text="option.label"></span>
-                    </button>
-                </template>
+            <div x-show="dash.modes.length === 0">
+                {{ __('No hay modos ganadores actualmente') }}.
+                <br>
+                {{ __('Seleccione otro tipo de bingo') }}.
             </div>
-        </div>
 
-        <div>
-            <label class="mb-3 block text-sm font-semibold text-indigo-100 text-left">
-                {{ __('Series automáticas') }}
-            </label>
-            <div class="grid grid-cols-2 gap-3">
-                <template x-for="option in [{label: 'Si', value: true}, {label: 'No', value: false}]" :key="'auto-series-' + option.label">
-                    <button type="button"
-                            @click="config.auto_series = option.value"
-                            :class="config.auto_series === option.value
-                                ? 'bg-fuchsia-500 border-fuchsia-400 shadow-lg shadow-fuchsia-900/40'
-                                : 'bg-white/5 border-white/15 hover:bg-white/10'"
-                            class="rounded-xl border-2 px-4 py-3 text-sm font-bold transition">
-                        <span x-text="option.label"></span>
-                    </button>
-                </template>
+            {{-- Cantidad de cartones --}}
+            <div>
+                <label class="mb-3 block text-sm font-semibold text-indigo-100 text-left">
+                    {{ __('Cantidad de cartones') }}
+                </label>
+                <div class="grid grid-cols-3 gap-3">
+                    <template x-for="n in [1,2,3]" :key="n">
+                        <button type="button"
+                                @click="config.count_cartons = n"
+                                :class="config.count_cartons === n
+                                    ? 'bg-fuchsia-500 border-fuchsia-400 shadow-lg shadow-fuchsia-900/40'
+                                    : 'bg-white/5 border-white/15 hover:bg-white/10'"
+                                class="rounded-xl border-2 py-3 text-lg font-bold transition">
+                            <span x-text="n"></span>
+                        </button>
+                    </template>
+                </div>
             </div>
-        </div>
 
-        {{-- Botón Iniciar Juego --}}
-        <button type="submit"
-                x-bind:disabled="!ready()" x-on:click="getStart()"
-                :class="!ready() ? 'opacity-50 cursor-not-allowed' : 'hover:bg-fuchsia-400 hover:-translate-y-0.5'"
-                class="group flex w-full items-center justify-center gap-2 rounded-2xl bg-fuchsia-500 px-8 py-4 text-lg font-bold text-white shadow-xl shadow-fuchsia-900/40 transition active:translate-y-0 focus:outline-none focus:ring-4 focus:ring-fuchsia-300/50">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M8 5v14l11-7L8 5z"/>
-            </svg>
-            Iniciar Juego
-        </button>
+            <div>
+                <label class="mb-3 block text-sm font-semibold text-indigo-100 text-left">
+                    {{ __('Selección automática') }}
+                </label>
+                <div class="grid grid-cols-2 gap-3">
+                    <template x-for="option in [{label: 'Si', value: true}, {label: 'No', value: false}]" :key="'auto-selection-' + option.label">
+                        <button type="button"
+                                @click="config.auto_selection = option.value"
+                                :class="config.auto_selection === option.value
+                                    ? 'bg-fuchsia-500 border-fuchsia-400 shadow-lg shadow-fuchsia-900/40'
+                                    : 'bg-white/5 border-white/15 hover:bg-white/10'"
+                                class="rounded-xl border-2 px-4 py-3 text-sm font-bold transition">
+                            <span x-text="option.label"></span>
+                        </button>
+                    </template>
+                </div>
+            </div>
 
-        <p x-show="ready()" class="text-center text-xs text-fuchsia-200/80 -mt-4">
-            Configure un modo de juego para continuar.
-        </p>
-    </form>
+            <div>
+                <label class="mb-3 block text-sm font-semibold text-indigo-100 text-left">
+                    {{ __('Series automáticas') }}
+                </label>
+                <div class="grid grid-cols-2 gap-3">
+                    <template x-for="option in [{label: 'Si', value: true}, {label: 'No', value: false}]" :key="'auto-series-' + option.label">
+                        <button type="button"
+                                @click="config.auto_series = option.value"
+                                :class="config.auto_series === option.value
+                                    ? 'bg-fuchsia-500 border-fuchsia-400 shadow-lg shadow-fuchsia-900/40'
+                                    : 'bg-white/5 border-white/15 hover:bg-white/10'"
+                                class="rounded-xl border-2 px-4 py-3 text-sm font-bold transition">
+                            <span x-text="option.label"></span>
+                        </button>
+                    </template>
+                </div>
+            </div>
+
+            {{-- Botón Iniciar Juego --}}
+            <button type="submit"
+                    x-bind:disabled="!ready()" x-on:click="getStart()"
+                    :class="!ready() ? 'opacity-50 cursor-not-allowed' : 'hover:bg-fuchsia-400 hover:-translate-y-0.5'"
+                    class="group flex w-full items-center justify-center gap-2 rounded-2xl bg-fuchsia-500 px-8 py-4 text-lg font-bold text-white shadow-xl shadow-fuchsia-900/40 transition active:translate-y-0 focus:outline-none focus:ring-4 focus:ring-fuchsia-300/50">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M8 5v14l11-7L8 5z"/>
+                </svg>
+                Iniciar Juego
+            </button>
+
+            <p x-show="ready()" class="text-center text-xs text-fuchsia-200/80 -mt-4">
+                Configure un modo de juego para continuar.
+            </p>
+        </form>
+
+    </div>
 
     <x-slot name="scripts">
 

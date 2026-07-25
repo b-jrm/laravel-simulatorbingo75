@@ -38,7 +38,7 @@
             {{ $header }}
         @endif
 
-        <main class="relative z-10 flex min-h-screen flex-col items-center justify-center px-6 py-8 text-center">
+        <main class="relative z-10 flex min-h-screen p-4">
             {{ $slot }}
         </main>
         

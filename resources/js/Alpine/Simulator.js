@@ -24,21 +24,24 @@ document.addEventListener('alpine:init', () => {
                 process: 'Loading game ...',
             },
             setting: {
+                vibration: false,
                 section: {
                     screen: {
                         height: 0,
                         width: 0,
                     },
                     board: {
-                        enabled: false,
+                        enabled: true,
                         extended: true,
+                        orientation: 'V', // V => Vertical | H => Horizontal,
+                        size: 'M', // S => Small | M => Medium | B => Big
                     },
                     submodes: {
-                        enabled: false,
+                        enabled: true,
                         extended: true,
                     },
                     sequence: {
-                        enabled: false,
+                        enabled: true,
                         extended: true,
                     },
                 },
@@ -107,9 +110,12 @@ document.addEventListener('alpine:init', () => {
                     || navigator.userAgent.match(/iPod/i) || 
                     navigator.userAgent.match(/BlackBerry/i) || 
                     navigator.userAgent.match(/Windows Phone/i)
-                )
+                ){
+                    this.setting.section.board.extended = false; // En mobiles por defecto se oculta la tabla de carmacion
+                    this.setting.section.board.size = 'B'; // En mobiles por defecto se oculta la tabla de carmacion
+                    this.setting.section.submodes.extended = false; // En mobiles por defecto se oculta los modos ganadores
                     return true;
-                else
+                }else
                     return false;
             },
             loading(){
@@ -120,10 +126,11 @@ document.addEventListener('alpine:init', () => {
 
                 if( !this.isMobile() )
                 {
+                    // Desktop
                     this.setting.section.board.enabled = true;
-                    this.setting.section.board.extended = false;
+                    this.setting.section.board.extended = true;
                     this.setting.section.submodes.enabled = true;
-                    this.setting.section.submodes.extended = false;
+                    this.setting.section.submodes.extended = true;
                 }
 
                 this.setting.storage = localStorage.getItem('simulator');
@@ -173,6 +180,11 @@ document.addEventListener('alpine:init', () => {
             start: function(){
 
                 // console.log("simulator",Alpine.$data.simulator);
+
+                // window.addEventListener('resize', () => {
+                //     this.setting.section.width = window.innerWidth;
+                //     this.setting.section.height = window.innerHeight;
+                // });
 
                 this.loading();
                 
