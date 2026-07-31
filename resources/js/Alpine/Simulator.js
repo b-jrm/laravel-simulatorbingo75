@@ -170,7 +170,7 @@ document.addEventListener('alpine:init', () => {
                 }
 
                 if( ! sync['setting'] ) sync['setting'] = this.setting;
-                console.log("sync",sync);
+                // console.log("sync",sync);
                 fetch(
                     "sync",
                     {
