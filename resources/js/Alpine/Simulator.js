@@ -30,10 +30,10 @@ document.addEventListener('alpine:init', () => {
                 autoSelect: false, // Auto seleccionar las series de un carton que coincidan
                 autoSeries: false, // Auto lanzamiento de series del bolillero
                 callSpeed: 'normal',
-                hours: '00', // Horas de duración del juego
-                minutes: '00', // Minutos de duración del juego
-                seconds: '00', // Segundos de duración del juego
-                time: null, // Estado del tiempo (Temporizador),
+                timeAutoSeries: { // Estado del tiempo (Temporizador se Series automaticas),
+                    instance: null,
+                    seconds: 5, // Segundos de duración del juego
+                },
                 section: {
                     screen: {
                         height: 0,
@@ -168,7 +168,9 @@ document.addEventListener('alpine:init', () => {
                 for (let m = 0; m < modules.length; m++) {
                     sync[modules[m]] = this[modules[m]];   
                 }
-                // console.log("sync",sync);
+
+                if( ! sync['setting'] ) sync['setting'] = this.setting;
+                console.log("sync",sync);
                 fetch(
                     "sync",
                     {
@@ -287,14 +289,19 @@ document.addEventListener('alpine:init', () => {
                 // ball.style.transform = "translate("+ (centerX - pos.x) + "px, "+ (centerY - pos.y) + "px)";
             },
             // Lanzamientos
-            setRound() {
+            setRound(returnSerie = false) {
                 // $('.btn-round').attr('disabled', true)
                 this.inRound = true;
+
+                let randSerie = null;
+
                 if( this.ranks.length ){
 
                     let number = this.getRandom(1, 75)
                     let newRound = this.getSerie(number)
                     let serie = newRound.letter+newRound.number
+
+                    if( returnSerie ) randSerie = newRound;
 
                     // console.log('newRound',newRound);
                     const indexRank = this.ranks.findIndex( rank => rank == newRound.number )
@@ -314,12 +321,14 @@ document.addEventListener('alpine:init', () => {
                             this.setting.sound.bolillero.audio = 'bolillero.mp3';
                             this.setVolume('bolillero');
                         }
+
                         this.sync(['board', 'ranks', 'sequence']);
+                        
                     }, 550);
 
                 }
 
-                
+                if( returnSerie ) return randSerie;
 
                 // setTimeout(() => { $('.btn-round').attr('disabled', false) }, 2000)
             },
@@ -334,11 +343,42 @@ document.addEventListener('alpine:init', () => {
                 if (number >= 61 && number <= 75) { indexObject = 4; rest = 61 }
                 const indexPosition = number - rest
                 this.board[indexObject].ranges[indexPosition].active = !this.board[indexObject].ranges[indexPosition].active
+
+                if(this.board[indexObject].ranges[indexPosition].active && this.setting.autoSelect){
+                    // console.log("autoSelect::serie",this.board[indexObject].letter+this.board[indexObject].ranges[indexPosition].number);
+                    // let serie = this.setRound(true);
+                    // if(serie) this.toggleSerie(serie.number, serie.letter);
+                    this.proccessAutoSelect(this.board[indexObject].letter, this.board[indexObject].ranges[indexPosition].number);
+                }
             },
             // Obtener un número aleatorio entre un rango minimo y máximo
             getRandom (min, max) {
                 // return Math.floor(Math.random() * (max - min) + min)
                 return this.ranks[Math.floor(Math.random() * this.ranks.length)];
+            },
+            toggleAutoSeries(){
+
+                this.setting.autoSeries = !this.setting.autoSeries;
+
+                if(this.setting.autoSeries){
+                    this.setting.timeAutoSeries.instance = 
+                        setInterval(
+                            () => { 
+                                this.setRound();
+                            }, this.setting.timeAutoSeries.seconds * 1000
+                        );
+                }else this.pauseAutoSeries();
+
+                if(this.ranks.length === 0) this.pauseAutoSeries(); 
+
+            },
+            pauseAutoSeries(){
+                clearInterval(this.setting.timeAutoSeries.instance);
+                this.setting.timeAutoSeries.instance = null;
+            },
+            toggleAutoSelect(){
+                this.setting.autoSelect = !this.setting.autoSelect;
+                if(this.setting.autoSelect) this.proccessAutoSelect();
             },
             // Obtener un número aleatorio entre un rango de acuerdo al resultado de getRandom
             getSerie (number) {
@@ -357,11 +397,85 @@ document.addEventListener('alpine:init', () => {
                 }
             },
             // Player Event Click In Serie From Carton
-            toggleSerie(number, letter, key){
+            toggleSerie(number, letter, key = null){
+
                 this.cartons[number][letter][key].active = !this.cartons[number][letter][key].active;
+            
                 setTimeout(() => {
                     this.sync(['cartons']);
                 }, 550);
+                
+            },
+            proccessAutoSelect(paramLetter = null, paramNumber = null){
+
+                if(this.setting.autoSelect){
+
+                    let proccessedCounter = 0;
+                    // console.log("proccessAutoSelect::paramLetter("+paramLetter+"), proccessAutoSelect::paramNumber("+paramNumber+")");
+
+                    for (const carton in this.cartons) {
+                        for (const letter in this.cartons[carton]) {
+                            for (const serie in this.cartons[carton][letter]) {
+
+                                // console.log("serie("+carton+")",this.cartons[carton][letter][serie].number);
+                                // console.log("serie("+carton+")",letter+this.cartons[carton][letter][serie].number);
+
+                                if( paramLetter !== null && paramNumber !== null ){
+                                    if( paramLetter === letter && paramNumber === this.cartons[carton][letter][serie].number){
+                                        proccessedCounter++;
+                                        this.cartons[carton][letter][serie].active = true;
+                                    }
+                                }else{
+                                    let boardLetter = this.board.filter(row => row.letter === letter)[0];
+                                    let boardNumber = boardLetter.ranges.filter(range => range.number === this.cartons[carton][letter][serie].number)[0];
+                                    // console.log("autoSelect::boardsMarket("+boardNumber?.active||false+")", boardLetter?.letter+boardNumber?.number);
+                                    proccessedCounter++;
+                                    this.cartons[carton][letter][serie].active = boardNumber?.active || false;
+                                    
+                                }
+                                
+
+                            }
+                        }
+                    }
+
+                    if(proccessedCounter > 0){
+                        setTimeout(() => {
+                            this.sync(['cartons']);
+                        }, 550);
+                    }
+
+                }
+
+                // let rangesActiveBoard = this.board.filter(row => row.ranges.filter(range => range.active === true));
+                // let rows = this.board.filter(row => row.letter === 'B');
+                // console.log("ranges",rows.ranges);
+                // let actives = rows.ranges.filter( range  => range.active === true );
+                // console.log("actives",actives);
+
+                // if(this.setting.autoSelect){
+
+                //     for (const number in this.cartons) {
+                //         for (const letter in this.cartons[number]) {
+                //             for (const serie in this.cartons[number][letter]) {
+
+                //                 console.log("serie("+number+")",this.cartons[number][letter][serie].number);
+                //                 console.log("serie("+number+").active",this.cartons[number][letter][serie].active);
+
+                //                 // CONFIGURAR AUTO SELECCION DE CARTONES
+
+                //             }
+                //         }
+                //     }
+                    
+                // }
+
+                // if(proccessed){
+                //     setTimeout(() => {
+                //         this.sync(['cartons']);
+                //     }, 550);
+                // }
+                
             },
             bingo(){
                 // console.log("Bingo-submodes",this.submodes);

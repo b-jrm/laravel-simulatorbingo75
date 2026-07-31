@@ -73,7 +73,7 @@
                             <p class="text-sm font-semibold">Selección automática</p>
                             <p class="text-xs text-indigo-200/60">Marca tus cartones al cantarse cada bola</p>
                         </div>
-                        <button @click="setting.autoSelect = !setting.autoSelect"
+                        <button @click="toggleAutoSelect()"
                                 :class="setting.autoSelect ? 'bg-fuchsia-500' : 'bg-white/10'"
                                 class="relative h-7 w-12 rounded-full transition">
                             <span class="absolute top-1 h-5 w-5 rounded-full bg-white transition-all"
@@ -87,7 +87,7 @@
                             <p class="text-sm font-semibold">Series automáticas</p>
                             <p class="text-xs text-indigo-200/60">Continúa a la siguiente serie sin confirmar</p>
                         </div>
-                        <button @click="setting.autoSeries = !setting.autoSeries"
+                        <button @click="toggleAutoSeries()"
                                 :class="setting.autoSeries ? 'bg-fuchsia-500' : 'bg-white/10'"
                                 class="relative h-7 w-12 rounded-full transition">
                             <span class="absolute top-1 h-5 w-5 rounded-full bg-white transition-all"
