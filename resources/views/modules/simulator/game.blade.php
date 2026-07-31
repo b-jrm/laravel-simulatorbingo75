@@ -19,6 +19,7 @@
             <audio id="shot" x-bind:src="'{{ asset('storage/sounds') }}/'+setting.sound.shot.audio" autoplay></audio>
         </template>
 
+        {{-- Setting Options --}}
         <div x-show="setting.open" x-cloak class="fixed inset-0 z-40">
             <div class="absolute inset-0 bg-black/60" @click="setting.open = false"
                 x-show="setting.open" x-transition:enter="transition-opacity duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"></div>
@@ -33,7 +34,7 @@
                 x-transition:leave-end="translate-x-full">
 
                 <div class="mb-6 flex items-center justify-between">
-                    <h2 class="text-xl font-black">Configuración</h2>
+                    <h2 class="text-xl font-black">{{ __('Configuration') }}</h2>
                     <button @click="setting.open = false" class="rounded-full p-2 hover:bg-white/10 transition">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M18.3 5.71 12 12l6.3 6.29-1.41 1.42L10.59 13.4 4.3 19.71 2.88 18.3 9.17 12 2.88 5.71 4.3 4.29l6.29 6.3 6.29-6.3z"/>
@@ -45,24 +46,24 @@
                     {{-- Sonido --}}
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-sm font-semibold">Sonido del juego</p>
-                            <p class="text-xs text-indigo-200/60">Efectos al cantar cada bola</p>
+                            <p class="text-sm font-semibold">{{ __('Game Sounds') }}</p>
+                            <p class="text-xs text-indigo-200/60">{{ __('Efectos al cantar cada bola') }}</p>
                         </div>
-                        <button @click="soundOn = !soundOn"
-                                :class="soundOn ? 'bg-fuchsia-500' : 'bg-white/10'"
+                        <button @click="setting.sound.general.active = !setting.sound.general.active"
+                                :class="setting.sound.general.active ? 'bg-fuchsia-500' : 'bg-white/10'"
                                 class="relative h-7 w-12 rounded-full transition">
                             <span class="absolute top-1 h-5 w-5 rounded-full bg-white transition-all"
-                                :class="soundOn ? 'left-6' : 'left-1'"></span>
+                                :class="setting.sound.general.active ? 'left-6' : 'left-1'"></span>
                         </button>
                     </div>
 
                     {{-- Volumen --}}
-                    <div :class="!soundOn && 'opacity-40 pointer-events-none'">
+                    <div :class="!setting.sound.general.active && 'opacity-40 pointer-events-none'">
                         <div class="mb-2 flex items-center justify-between">
                             <p class="text-sm font-semibold">Volumen</p>
-                            <span class="text-xs text-indigo-200/70" x-text="volume + '%'"></span>
+                            <span class="text-xs text-indigo-200/70" x-text="setting.sound.general.volume + '%'"></span>
                         </div>
-                        <input type="range" min="0" max="100" x-model="volume"
+                        <input type="range" min="0" max="100" x-model="setting.sound.general.volume"
                             class="w-full accent-fuchsia-500">
                     </div>
 
@@ -72,11 +73,11 @@
                             <p class="text-sm font-semibold">Selección automática</p>
                             <p class="text-xs text-indigo-200/60">Marca tus cartones al cantarse cada bola</p>
                         </div>
-                        <button @click="autoSelect = !autoSelect"
-                                :class="autoSelect ? 'bg-fuchsia-500' : 'bg-white/10'"
+                        <button @click="setting.autoSelect = !setting.autoSelect"
+                                :class="setting.autoSelect ? 'bg-fuchsia-500' : 'bg-white/10'"
                                 class="relative h-7 w-12 rounded-full transition">
                             <span class="absolute top-1 h-5 w-5 rounded-full bg-white transition-all"
-                                :class="autoSelect ? 'left-6' : 'left-1'"></span>
+                                :class="setting.autoSelect ? 'left-6' : 'left-1'"></span>
                         </button>
                     </div>
 
@@ -86,21 +87,21 @@
                             <p class="text-sm font-semibold">Series automáticas</p>
                             <p class="text-xs text-indigo-200/60">Continúa a la siguiente serie sin confirmar</p>
                         </div>
-                        <button @click="autoSeries = !autoSeries"
-                                :class="autoSeries ? 'bg-fuchsia-500' : 'bg-white/10'"
+                        <button @click="setting.autoSeries = !setting.autoSeries"
+                                :class="setting.autoSeries ? 'bg-fuchsia-500' : 'bg-white/10'"
                                 class="relative h-7 w-12 rounded-full transition">
                             <span class="absolute top-1 h-5 w-5 rounded-full bg-white transition-all"
-                                :class="autoSeries ? 'left-6' : 'left-1'"></span>
+                                :class="setting.autoSeries ? 'left-6' : 'left-1'"></span>
                         </button>
                     </div>
 
                     {{-- Velocidad de llamado --}}
-                    <div>
+                    <div x-show="setting.autoSeries" class="transition ease-out duration-100">
                         <p class="mb-2 text-sm font-semibold">Velocidad de llamado</p>
                         <div class="grid grid-cols-3 gap-2">
                             <template x-for="opt in [{v:'lenta',l:'Lenta'},{v:'normal',l:'Normal'},{v:'rapida',l:'Rápida'}]" :key="opt.v">
-                                <button @click="callSpeed = opt.v"
-                                        :class="callSpeed === opt.v ? 'bg-fuchsia-500 border-fuchsia-400' : 'bg-white/5 border-white/15 hover:bg-white/10'"
+                                <button @click="setting.callSpeed = opt.v"
+                                        :class="setting.callSpeed === opt.v ? 'bg-fuchsia-500 border-fuchsia-400' : 'bg-white/5 border-white/15 hover:bg-white/10'"
                                         class="rounded-xl border-2 py-2 text-xs font-bold transition">
                                     <span x-text="opt.l"></span>
                                 </button>
@@ -382,7 +383,7 @@
                 <div class="hidden md:flex flex-col">
                     <template x-if="setting.section.board.enabled && setting.section.board.extended">
                         <div class="flex gap-1 font-bold border-[.7em] rounded-md md:rounded-r-none p-0 border-white/50 mx-auto text-[.7em]" 
-                            :class="(setting.section.board.orientation === 'V' ? 'flex-row') : 'flex-col'; (setting.section.board.size == 'S' ? 'scale-50' : (setting.section.board.size == 'M' ? 'scale-75' : ''))">
+                            :class="setting.section.board.orientation === 'V' ? 'flex-row' : 'flex-col'; setting.section.board.size === 'S' ? 'scale-50' : setting.section.board.size == 'M' ? 'scale-75' : '';">
                             <!-- table-auto border rounded-md text-white text-[10px] md:text-[14px] w-full -->
                             <!-- :class="grid-cols-(board[0].ranges.length + 1)" -->
                             <!-- <p class="text-white text-end" x-text="'Board'"></p> -->

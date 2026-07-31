@@ -24,7 +24,16 @@ document.addEventListener('alpine:init', () => {
                 process: 'Loading game ...',
             },
             setting: {
+                open: false,
+                storage: null,
                 vibration: false,
+                autoSelect: false, // Auto seleccionar las series de un carton que coincidan
+                autoSeries: false, // Auto lanzamiento de series del bolillero
+                callSpeed: 'normal',
+                hours: '00', // Horas de duración del juego
+                minutes: '00', // Minutos de duración del juego
+                seconds: '00', // Segundos de duración del juego
+                time: null, // Estado del tiempo (Temporizador),
                 section: {
                     screen: {
                         height: 0,
@@ -45,20 +54,16 @@ document.addEventListener('alpine:init', () => {
                         extended: true,
                     },
                 },
-                open: false,
-                storage: null,
                 module: [ 'cartons', 'board', 'ranks', 'mode', 'submodes', 'sequence' ],
                 color: {
                     class: ['bg-yellow-500', 'bg-blue-500', 'bg-red-500', 'bg-green-500', 'bg-orange-500'],
                     style: ['#EBB308', 'bg-blue-500', 'bg-red-500', 'bg-green-500', 'bg-orange-500'],
                 },
-                // autoSelect: false, // Auto seleccionar las series de un carton que coincidan
-                // autoRound: false, // Auto lanzamiento de series del bolillero
-                // hours: '00', // Horas de duración del juego
-                // minutes: '00', // Minutos de duración del juego
-                // seconds: '00', // Segundos de duración del juego
-                // time: null, // Estado del tiempo (Temporizador),
                 sound: {
+                    general: {
+                        active: true,
+                        volume: 50,
+                    },
                     serie: { // Audio dinamico de cada serie del juego en curso
                         audio: '',
                         volume: 1,
