@@ -268,6 +268,27 @@
             </div>
         </template>
 
+        <template x-if="setting.intentFinish">
+            <div class="flex flex-col items-center justify-center p-12 w-full h-full absolute z-20 top-0 bottom-0 bg-indigo-950/95 mx-auto rounded-md gap-4">
+                <h1 class="text-2xl sm:text-3xl font-black tracking-tight">BINGO<span class="text-fuchsia-400">75</span></h1>
+                <span class="text-xs font-medium uppercase tracking-wide text-fuchsia-200/80 text-center">Al confirmar se perdera los avances</span>
+                <hr class="border border-white w-1/2">
+                <span class="mb-3 inline-block rounded-full bg-white/10 px-4 py-1 text-sm font-medium tracking-wide text-fuchsia-200 backdrop-blur">
+                    ¿Desea finalizar el juego?
+                </span>
+                <div class="grid grid-cols-2 gap-3">
+                    <button type="button" x-on:click="finish()"
+                        class="inline-flex items-center justify-center gap-2 rounded-2xl border-2 border-white/40 bg-white/5 px-8 py-4 text-lg font-bold text-white backdrop-blur transition hover:bg-fuchsia-400 hover:-translate-y-0.5 active:translate-y-0 focus:outline-none focus:ring-4 focus:ring-fuchsia-300/50">
+                        Si
+                    </button>
+                    <button type="button" x-on:click="setting.intentFinish = false"
+                        class="inline-flex items-center justify-center gap-2 rounded-2xl border-2 border-white/40 bg-white/5 px-8 py-4 text-lg font-bold text-white backdrop-blur transition bg-fuchsia-400 hover:-translate-y-0.5 active:translate-y-0 focus:outline-none focus:ring-4 focus:ring-fuchsia-300/50">
+                        No
+                    </button>
+                </div>
+            </div>
+        </template>
+
         <div class="flex flex-col gap-1 rounded-md p-5 shadow-2xl shadow-fuchsia-950/40 ring-1 ring-fuchsia-500/10 backdrop-blur overflow-hidden">
             <!-- bg-black/50 -->
 
@@ -282,7 +303,7 @@
 
                 {{-- Setting --}}
                 <div class="flex items-center justify-center gap-2">
-                    <button @click="setting.open = true" data-tip="{{ __('Setting') }}"
+                    <button type="button" @click="setting.open = true" data-tip="{{ __('Setting') }}"
                         class="tooltip tooltip-bottom tooltip-warning rounded-md border border-white/10 bg-white/5 p-3 text-indigo-100 hover:bg-white/10 transition flex flex-col items-center justify-center">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M19.14 12.94a7.14 7.14 0 0 0 .06-.94 7.14 7.14 0 0 0-.06-.94l2.03-1.58a.5.5 0 0 0 .12-.64l-1.92-3.32a.5.5 0 0 0-.6-.22l-2.39.96a7.3 7.3 0 0 0-1.63-.94l-.36-2.54a.5.5 0 0 0-.5-.42h-3.84a.5.5 0 0 0-.5.42l-.36 2.54c-.59.24-1.14.56-1.63.94l-2.39-.96a.5.5 0 0 0-.6.22L2.79 8.84a.5.5 0 0 0 .12.64L4.94 11a7.14 7.14 0 0 0 0 1.88l-2.03 1.58a.5.5 0 0 0-.12.64l1.92 3.32c.14.24.42.32.6.22l2.39-.96c.49.38 1.04.7 1.63.94l.36 2.54a.5.5 0 0 0 .5.42h3.84a.5.5 0 0 0 .5-.42l.36-2.54c.59-.24 1.14-.56 1.63-.94l2.39.96c.24.1.46 0 .6-.22l1.92-3.32a.5.5 0 0 0-.12-.64l-2.03-1.58zM12 15.5A3.5 3.5 0 1 1 12 8.5a3.5 3.5 0 0 1 0 7z"/>
@@ -295,12 +316,12 @@
                             x-text="sequence[sequence.length - 1].letter+sequence[sequence.length - 1].number">
                         </div>
                     </div> -->
-                    <button @click="stop" data-tip="{{ __('Pause') }}"
+                    <button type="button" @click="stop" data-tip="{{ __('Pause') }}"
                         class="tooltip tooltip-bottom tooltip-warning rounded-md border border-white/10 bg-white/5 p-3 text-indigo-100 hover:bg-white/10 transition flex flex-col items-center justify-center">
                         <svg name="pause" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24"><path fill="currentColor" d="M10 16q.425 0 .713-.288T11 15V9q0-.425-.288-.713T10 8q-.425 0-.713.288T9 9v6q0 .425.288.713T10 16Zm4 0q.425 0 .713-.288T15 15V9q0-.425-.288-.713T14 8q-.425 0-.713.288T13 9v6q0 .425.288.713T14 16ZM4 20q-.825 0-1.413-.588T2 18V6q0-.825.588-1.413T4 4h16q.825 0 1.413.588T22 6v12q0 .825-.588 1.413T20 20H4Z"/></svg>
                         <p class="md:hidden text-xs">&nbsp;{{ __('Pause') }}</p>
                     </button>
-                    <button @click="finish" data-tip="{{ __('Close') }}"
+                    <button type="button" @click="intentFinish" data-tip="{{ __('Close') }}"
                         class="tooltip tooltip-bottom tooltip-warning rounded-md border border-white/10 bg-white/5 p-3 text-indigo-100 hover:bg-white/10 transition flex flex-col items-center justify-center">
                         <svg name="close" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24"><path fill="currentColor" d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2m-3.4 14L12 13.4L8.4 17L7 15.6l3.6-3.6L7 8.4L8.4 7l3.6 3.6L15.6 7L17 8.4L13.4 12l3.6 3.6l-1.4 1.4Z"/></svg>
                         <p class="md:hidden text-xs">&nbsp;{{ __('Close') }}</p>

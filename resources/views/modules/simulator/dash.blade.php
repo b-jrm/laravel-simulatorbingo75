@@ -38,7 +38,7 @@
             </h1>
         </div>
 
-        <div class="flex flex-col items-center gap-6 text-[15px] text-white font-thin z-20" x-show="storage !== null">
+        <div class="flex flex-col items-center gap-6 text-[15px] text-white font-thin z-20" x-show="storage !== null && progress.status === 0">
             <h1 class="text-5xl sm:text-6xl md:text-7xl font-black tracking-tight drop-shadow-lg m-2">
                 <span class="text-fuchsia-400">Tiene una</span> Partida <span class="text-fuchsia-400">Sin terminar</span>
             </h1>
@@ -65,21 +65,21 @@
             </div>
         </div>
 
+        <div class="w-full md:1/2 flex flex-col items-center justify-center text-[15px] text-white font-thin z-20" x-show="progress.status > 0 && progress.status <= 100">
+            
+            <div class="mb-1 text-base font-medium text-purple-700 dark:text-white text-left flex flex-row flex-nowrap w-3/5 pl-1">
+                <p>&#10140;</p>&nbsp;<p class="text-[14px] font-thin" x-text="progress.text">Loading ...</p>
+            </div>
+            <div class="w-3/5 bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                <div class="bg-white h-2.5 rounded-full dark:bg-white" x-bind:style="'width: '+progress.status+'%'"></div>
+            </div>
+            
+        </div>
+
         <!--  method="POST" action="{{ route('simulator') }}" -->
-        <form x-show="storage === null"
+        <form x-show="storage === null" x-on:submit.prevent="getStart()"
                 class="w-full max-w-lg rounded-3xl border border-white/10 bg-white/5 p-6 sm:p-8 shadow-2xl backdrop-blur-md space-y-8">
             @csrf
-
-            <div class="w-full h-full absolute top-0 left-0 flex flex-col items-center justify-center text-[15px] text-white font-thin z-20" x-show="progress.status > 0 && progress.status < 100">
-                
-                <div class="mb-1 text-base font-medium text-purple-700 dark:text-white text-left flex flex-row flex-nowrap w-3/5 pl-1">
-                    <p>&#10140;</p>&nbsp;<p class="text-[14px] font-thin" x-text="progress.process">Loading ...</p>
-                </div>
-                <div class="w-3/5 bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-                    <div class="bg-white h-2.5 rounded-full dark:bg-white" x-bind:style="'width: '+progress.status+'%'"></div>
-                </div>
-                
-            </div>
 
             <div class="z-10">
                 <label class="mb-3 block text-sm font-semibold text-indigo-100 text-left">
@@ -253,7 +253,7 @@
 
             {{-- Botón Iniciar Juego --}}
             <button type="submit"
-                    x-bind:disabled="!ready()" x-on:click="getStart()"
+                    x-bind:disabled="!ready()"
                     :class="!ready() ? 'opacity-50 cursor-not-allowed' : 'hover:bg-fuchsia-400 hover:-translate-y-0.5'"
                     class="group flex w-full items-center justify-center gap-2 rounded-2xl bg-fuchsia-500 px-8 py-4 text-lg font-bold text-white shadow-xl shadow-fuchsia-900/40 transition active:translate-y-0 focus:outline-none focus:ring-4 focus:ring-fuchsia-300/50">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
@@ -285,7 +285,16 @@
                     cookie: null,
                     progress: {
                         status: 0,
-                        process: 'Loading game ...',
+                        process: [
+                            'Loading game ...',
+                            'Save Config ...',
+                            'Create Board ...',
+                            'Create Modes ...',
+                            'Create Cartons ...',
+                            'Loading game ...',
+                            'Load Dashboard Game ...',
+                        ],
+                        text: 'Loading ...',
                     },
                     config: {
                         context: 1,
@@ -423,8 +432,29 @@
                             // this.config.auto_series > 0 
                         );
                     },
+                    showStatusProgress(){
+                        
+                        let countProccess = Object.keys(this.progress.process).length;
+                        let rangeEachProccess = 100 / countProccess;
+                        // console.log("countProccess", countProccess);
+                        // console.log("rangeEachProccess", rangeEachProccess);
+                        let currentMax = currentMin = 0;
+                        for (let index = 0; index < countProccess; index++) {
+                            currentMin += (index === 0 ? index : rangeEachProccess);
+                            currentMax += rangeEachProccess;
+                            // console.log("range current", currentMin+" - "+currentMax);
+                            if(this.progress.status >= currentMin && this.progress.status <= currentMax){
+                                this.progress.text = this.progress.process[index];
+                                break;
+                            }
+                            
+                        }
+
+                        countProccess = rangeEachProccess = currentMax = null;
+
+                    },
                     getStart: function(){
-                        this.progress.status == 0;
+                        this.progress.status == 1;
                         if(this.ready()){
                             
                             fetch(
@@ -443,7 +473,7 @@
                             .then( sync => {
                                 // console.log("start",sync);
                                 if(sync.conf != null) // Object.entries(sync.data.conf).length
-                                    localStorage.setItem(sync.local,sync.conf);
+                                    localStorage.setItem(sync.local, sync.conf);
 
                                 if(localStorage.getItem(sync.local))
                                     this.storage = localStorage.getItem(sync.local);                              
@@ -451,14 +481,17 @@
                             });
 
                             const progress = setInterval(() => {
-                                if( this.progress.status <= 100 )
+                                // console.log("this.progress.status",this.progress.status);
+                                if( this.progress.status <= 100 ){
                                     this.progress.status++;
-                                else{
+                                    this.showStatusProgress();
+                                }else{
+                                    // this.progress.status = 1;
                                     clearInterval(progress);
-                                    this.progress.status = 0;
+                                    // console.log("location.href", "/simulator/game?_st="+this.storage);
                                     location.href = "/simulator/game?_st="+this.storage;
                                 }
-                            }, 30);
+                            }, 20);
                         }
                     },
                     namespaced: true,

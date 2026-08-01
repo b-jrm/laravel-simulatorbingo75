@@ -27,6 +27,7 @@ document.addEventListener('alpine:init', () => {
                 open: false,
                 storage: null,
                 vibration: false,
+                intentFinish: false,
                 autoSelect: false, // Auto seleccionar las series de un carton que coincidan
                 autoSeries: false, // Auto lanzamiento de series del bolillero
                 callSpeed: 'normal',
@@ -551,6 +552,9 @@ document.addEventListener('alpine:init', () => {
             },
             keep(){
                 this.pause = false;
+            },
+            intentFinish(){
+                this.setting.intentFinish = true;
             },
             finish(){
                 localStorage.removeItem('simulator');

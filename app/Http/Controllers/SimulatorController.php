@@ -42,8 +42,9 @@ class SimulatorController extends Controller
             if(Storage::disk($this->disk)->exists($request->_st.'.'.$this->extension))
                 $this->hash = $request->_st;
             $config = Storage::disk($this->disk)->json($this->hash.'.'.$this->extension);
+            // var_dump(json_encode($config)); exit;
         }else $config = null;
-        // dd($request->all());
+        // dd($this->path.'game');
         return view($this->path.'game', compact('config'));
 
     }
