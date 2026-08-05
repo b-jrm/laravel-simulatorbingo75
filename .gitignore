@@ -4,7 +4,7 @@
 /public/hot
 /public/storage
 /storage/*.key
-!/storage/sounds/*
+!/storage/app/sounds/*
 /vendor
 .env
 .env.backup
