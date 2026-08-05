@@ -24,6 +24,8 @@ document.addEventListener('alpine:init', () => {
                 process: 'Loading game ...',
             },
             setting: {
+                lang: 'es',
+                gender: 'woman',
                 open: false,
                 storage: null,
                 vibration: false,
@@ -72,7 +74,7 @@ document.addEventListener('alpine:init', () => {
                         pause: false,
                     },
                     start: { // Mensaje al iniciar un juego
-                        audio: 'start_male.mp3',
+                        audio: 'start.mp3',
                         volume: 1,
                         play: true,
                         pause: false,
@@ -90,13 +92,13 @@ document.addEventListener('alpine:init', () => {
                         pause: false,
                     },
                     bolillero: { // bolillero.mp3
-                        audio: '',
+                        audio: 'ballshaped.mp3',
                         volume: 0.5,
                         play: true,
                         pause: false,
                     },
                     shot: { // Lanzamiento
-                        audio: '',
+                        audio: 'shot.mp3',
                         volume: 1,
                         play: true,
                         pause: false,
@@ -319,7 +321,7 @@ document.addEventListener('alpine:init', () => {
                         this.setting.sound.shot.audio = ''
                         this.inRound = false;
                         if(this.setting.sound.bolillero.volume > 0){
-                            this.setting.sound.bolillero.audio = 'bolillero.mp3';
+                            this.setting.sound.bolillero.audio = 'ballshaped.mp3';
                             this.setVolume('bolillero');
                         }
 

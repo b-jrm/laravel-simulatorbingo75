@@ -36,6 +36,12 @@ return [
             'throw' => false,
         ],
 
+        'sounds' => [
+            'driver' => 'local',
+            'root' => storage_path('app/sounds'),
+            'throw' => false,
+        ],
+
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app'),
@@ -77,6 +83,7 @@ return [
 
     'links' => [
         public_path('storage') => storage_path('app/public'),
+        public_path('storage/sounds') => storage_path('app/sounds'),
     ],
 
 ];

@@ -31,7 +31,7 @@
         </div>
         
         <span class="mb-4 inline-block rounded-full bg-white/10 px-4 py-1 text-sm font-medium tracking-wide text-fuchsia-200 backdrop-blur">
-            75 Bolas · Simulador en vivo
+            75 Bolas · Simulador de bingo
         </span>
 
         <h1 class="text-5xl sm:text-6xl md:text-7xl font-black tracking-tight drop-shadow-lg">
@@ -39,8 +39,7 @@
         </h1>
 
         <p class="mt-4 max-w-xl text-lg sm:text-xl text-indigo-100/90">
-            Marca tus cartones, sigue el sorteo en tiempo real y grita ¡BINGO!
-            desde donde estés.
+            Marca tus cartones, sigue el sorteo y grita ¡BINGO! donde estés.
         </p>
 
         <div class="mt-10 flex w-full max-w-md flex-col gap-4 sm:flex-row sm:justify-center">
@@ -54,19 +53,19 @@
                 Jugar ahora
             </a>
 
-            <a href="#"
+            <!-- <a href="#"
                 class="inline-flex items-center justify-center gap-2 rounded-2xl border-2 border-white/40 bg-white/5 px-8 py-4 text-lg font-bold text-white backdrop-blur transition
                         hover:bg-white/15 hover:-translate-y-0.5 active:translate-y-0 focus:outline-none focus:ring-4 focus:ring-white/30">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 12c2.7 0 8 1.34 8 4v2H4v-2c0-2.66 5.3-4 8-4zm0-2a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/>
                 </svg>
                 Mi Cuenta
-            </a>
+            </a> -->
         </div>
 
-        <p class="mt-6 text-sm text-indigo-200/70">
+        <!-- <p class="mt-6 text-sm text-indigo-200/70">
             ¿Ya tienes cuenta? El botón de "Mi Cuenta" te lleva a iniciar sesión o registrarte.
-        </p>
+        </p> -->
 
     </div>
 

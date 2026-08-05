@@ -4,19 +4,19 @@
     <!-- class="w-full rounded-lg overflow-hidden flex flex-col relative" -->
 
         <template x-if="sequence.length == 0">
-            <audio id="start" x-bind:src="'{{ asset('storage/sounds') }}/'+setting.sound.start.audio" autoplay></audio>
+            <audio id="start" x-bind:src="'{{ asset('storage/sounds') }}/'+setting.lang+'/'+setting.gender+'/'+setting.sound.start.audio" autoplay></audio>
         </template>
 
         <template x-if="setting.sound.serie.audio !== ''">
-            <audio id="serie" x-bind:src="'{{ asset('storage/sounds') }}/'+setting.sound.serie.audio+'.mp3'" autoplay></audio>
+            <audio id="serie" x-bind:src="'{{ asset('storage/sounds') }}/'+setting.lang+'/'+setting.gender+'/'+setting.sound.serie.audio+'.mp3'" autoplay></audio>
         </template>
 
         <template x-if="setting.sound.bolillero.audio !== ''">
-            <audio id="bolillero" x-bind:src="'{{ asset('storage/sounds') }}/'+setting.sound.bolillero.audio" class="hidden" autoplay loop controls x-bind:volume="setting.sound.bolillero.volume"></audio>
+            <audio id="bolillero" x-bind:src="'{{ asset('storage/sounds') }}/effects/'+setting.sound.bolillero.audio" class="hidden" autoplay loop controls x-bind:volume="setting.sound.bolillero.volume"></audio>
         </template>
 
         <template x-if="setting.sound.shot.audio !== ''">
-            <audio id="shot" x-bind:src="'{{ asset('storage/sounds') }}/'+setting.sound.shot.audio" autoplay></audio>
+            <audio id="shot" x-bind:src="'{{ asset('storage/sounds') }}/effects/'+setting.sound.shot.audio" autoplay></audio>
         </template>
 
         {{-- Setting Options --}}
@@ -130,7 +130,7 @@
         <template x-if="setting.checking.status && setting.checking.wins.length < 1">
             <div class="flex flex-col items-center justify-center p-12 w-full h-full absolute z-20 top-0 bottom-0 bg-indigo-950/95 mx-auto rounded-md gap-4 transition-all">
 
-                <audio id="win" x-bind:src="'{{ asset('storage/sounds') }}/'+setting.sound.win.audio" autoplay></audio>
+                <audio id="win" x-bind:src="'{{ asset('storage/sounds') }}/effects/'+setting.sound.win.audio" autoplay></audio>
 
                 <h1 class="text-2xl sm:text-3xl font-black tracking-tight">BINGO<span class="text-fuchsia-400">75</span></h1>
                 <span class="text-xs font-medium uppercase tracking-wide text-fuchsia-200/80 text-center">Partida en curso</span>
@@ -158,8 +158,8 @@
         <template x-if="setting.checking.status && setting.checking.wins.length > 0">
             <div class="flex flex-col items-center justify-center p-12 w-full h-full absolute z-20 top-0 bottom-0 bg-indigo-950/95 mx-auto rounded-md gap-4">
                 
-                <audio id="win" x-bind:src="'{{ asset('storage/sounds') }}/'+setting.sound.win.audio" autoplay></audio>
-                <audio id="win" x-bind:src="'{{ asset('storage/sounds') }}/'+setting.sound.celebration.audio" autoplay></audio>
+                <audio id="win" x-bind:src="'{{ asset('storage/sounds') }}/'+setting.lang+'/'+setting.gender+'/'+setting.sound.win.audio" autoplay></audio>
+                <audio id="win" x-bind:src="'{{ asset('storage/sounds') }}/'+setting.lang+'/'+setting.gender+'/'+setting.sound.celebration.audio" autoplay></audio>
 
                 <h1 class="text-2xl sm:text-3xl font-black tracking-tight">BINGO<span class="text-fuchsia-400">75</span></h1>
                 <span class="text-xs font-medium uppercase tracking-wide text-fuchsia-200/80 text-center">Partida Ganada</span>
