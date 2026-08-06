@@ -403,7 +403,7 @@
                         </div>
                     </template>
                     <template x-if="!setting.autoSeries">
-                        <button type="button" class="flex w-auto h-auto max-h-[80px] items-center justify-center gap-2 rounded-2xl md:rounded-0 md:rounded-tr-2xl bg-gradient-to-r from-fuchsia-500 to-pink-500 px-6 py-5 text-xl font-black uppercase tracking-wide text-white shadow-2xl shadow-fuchsia-900/50 transition hover:scale-[1.02] active:scale-100 animate-pulse-slow cursor-pointer" :class="inRound ? 'cursor-not-allowed' : ''" x-on:click="setRound(); setTimeout(() => { moveScroll(0, 999999,'#sequences') }, 1000)" :disabled="inRound">{{ __('Clic Next Ball') }}</button>
+                        <button type="button" class="flex w-auto h-auto max-h-[80px] items-center justify-center gap-2 rounded-2xl md:rounded-0 md:rounded-tr-2xl bg-gradient-to-r from-fuchsia-500 to-pink-500 px-6 py-5 text-xl font-black uppercase tracking-wide text-white shadow-2xl shadow-fuchsia-900/50 transition hover:scale-[1.02] active:scale-100 animate-pulse-slow cursor-pointer" :class="inRound ? 'cursor-not-allowed' : ''" x-on:click="setRound(); setTimeout(() => { moveScroll(0, 999999,'#sequences') }, 1000)" :disabled="inRound">{{ __('Click Next Ball') }}</button>
                     </template>
                 </div>
                 

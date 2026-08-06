@@ -61,7 +61,7 @@ document.addEventListener('alpine:init', () => {
                         extended: true,
                     },
                 },
-                module: [ 'cartons', 'board', 'ranks', 'mode', 'submodes', 'sequence' ],
+                module: [ 'setting', 'cartons', 'board', 'ranks', 'mode', 'submodes', 'sequence' ],
                 color: {
                     class: ['bg-yellow-500', 'bg-blue-500', 'bg-red-500', 'bg-green-500', 'bg-orange-500'],
                     style: ['#EBB308', 'bg-blue-500', 'bg-red-500', 'bg-green-500', 'bg-orange-500'],
@@ -163,7 +163,25 @@ document.addEventListener('alpine:init', () => {
                     ).then( res => res.json() )
                     .then( build => {
                         // console.log("module-"+this.setting.module[load],build);
-                        this[this.setting.module[load]] = build;
+                        switch (this.setting.module[load]) {
+                            case 'setting':
+                                // Settear setting de acuerdo a la configuracion por defecto y al formulario dash del simulador
+                                for (const sett in build) {
+                                    // console.log("sett", sett);
+                                    if( typeof this.setting[sett] !== undefined ){
+                                        // console.log("setting("+sett+")", this.setting[sett]);
+                                        // console.log("build("+sett+")", build[sett]);
+                                        this.setting[sett] = this.setting[sett] = build[sett];
+                                    }
+                                    // else console.log("Not exists", this.setting[sett]);
+                                }
+                                break;
+                        
+                            default:
+                                this[this.setting.module[load]] = build;
+                                break;
+                        }
+
                         this.progress.status += ( 100 / this.setting.module.length );
                     });
                 }
@@ -203,6 +221,13 @@ document.addEventListener('alpine:init', () => {
                 this.loading();
 
                 this.setting.timeAutoSeries.countDown.currentTime = this.setting.timeAutoSeries.seconds;
+
+                // Validar la configuracion inicial
+                setTimeout(() => {
+                    // console.log("this.setting.autoSeries", this.setting.autoSeries);
+                    this.toggleAutoSeries(this.setting.autoSeries);
+                    this.toggleAutoSelect(this.setting.autoSelect);
+                }, 1000);                
                 
                 // this.setting.sound.bolillero.audio = 'bolillero.mp3'
                 // setInterval(() => {
@@ -368,9 +393,12 @@ document.addEventListener('alpine:init', () => {
                 // return Math.floor(Math.random() * (max - min) + min)
                 return this.ranks[Math.floor(Math.random() * this.ranks.length)];
             },
-            toggleAutoSeries(){
+            toggleAutoSeries(toggleManual = null){
 
-                this.setting.autoSeries = !this.setting.autoSeries;
+                if(toggleManual === null)
+                    this.setting.autoSeries = !this.setting.autoSeries;
+                else 
+                    this.setting.autoSeries = toggleManual;
 
                 if(this.setting.autoSeries){
                     this.setting.timeAutoSeries.instance = setInterval(
@@ -393,9 +421,15 @@ document.addEventListener('alpine:init', () => {
                 clearInterval(this.setting.timeAutoSeries.countDown.instance);
                 this.setting.timeAutoSeries.instance = this.setting.timeAutoSeries.countDown.instance = null;
             },
-            toggleAutoSelect(){
-                this.setting.autoSelect = !this.setting.autoSelect;
+            toggleAutoSelect(toggleManual = null){
+                
+                if(toggleManual === null)
+                    this.setting.autoSelect = !this.setting.autoSelect;
+                else 
+                    this.setting.autoSelect = toggleManual;
+
                 if(this.setting.autoSelect) this.proccessAutoSelect();
+
             },
             // Obtener un número aleatorio entre un rango de acuerdo al resultado de getRandom
             getSerie (number) {

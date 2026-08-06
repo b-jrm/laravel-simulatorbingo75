@@ -90,13 +90,17 @@ class SimulatorController extends Controller
 
     public function loading(Request $request)
     {
+        // dd($request->all());
         $this->hash = $request->cookie($this->cookie);
 
         if( !empty($request->storage) )
             $config = Storage::disk($this->disk)->json($request->storage.'.'.$this->extension);
         
+        // dd($config);
+
         if( isset($config) ){
             $load = $config[$request->module]?? null;
+            // dd($load);
         }else{
             switch ($request[0]) {
                 case 'board':
@@ -154,13 +158,29 @@ class SimulatorController extends Controller
             $config['ranks'] = Bingo75::ranks();
             $config['cartons'] = Bingo75::cartons($request->count_cartons);
             $config['board'] = Bingo75::board();
+            $config['setting'] = [
+                'lang' => "es",
+                'gender' => "woman",
+                'open' => false,
+                'autoSelect' => $request->auto_selection,
+                'autoSeries' => $request->auto_series,
+                'vibration' => false,
+                'intentFinish' => false,
+                'callSpeed' => "normal",
+                'timeAutoSeries' => [
+                    "instance" => null,
+                    "seconds" => 5,
+                    "countDown" => [
+                        "instance" => null,
+                        "currentTime" => 0,
+                    ]
+                ],
+            ];
             Storage::disk($this->disk)->put($this->hash.'.'.$this->extension, json_encode($config));
         }
 
         echo response()->json([ 'local' => $this->store, 'conf' => $this->hash?? null ])->getContent();
     }
-
-    
 
     public function contexts(){
 
