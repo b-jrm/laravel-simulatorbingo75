@@ -392,7 +392,19 @@
                             {{ __('Board') }}
                         </button>
                     </div>
-                    <button type="button" class="flex w-auto h-auto max-h-[80px] items-center justify-center gap-2 rounded-2xl md:rounded-0 md:rounded-tr-2xl bg-gradient-to-r from-fuchsia-500 to-pink-500 px-6 py-5 text-xl font-black uppercase tracking-wide text-white shadow-2xl shadow-fuchsia-900/50 transition hover:scale-[1.02] active:scale-100 animate-pulse-slow cursor-pointer" :class="inRound ? 'cursor-not-allowed' : ''" x-on:click="setRound(); setTimeout(() => { moveScroll(0, 999999,'#sequences') }, 1000)" :disabled="inRound">{{ __('Next Ball') }}</button>
+
+                    <template x-if="setting.autoSeries">
+                        <div class="flex flex-row flex-nowrap items-center justify-center gap-2">
+                            <span class="font-thin text-sm">{{ __('Next ball in') }}</span>
+                            <span class="font-bold text-[58] border border-white rounded-md p-2 text-center" 
+                                x-text="( (setting.timeAutoSeries.countDown.currentTime < 10) ? '0' : '' )+setting.timeAutoSeries.countDown.currentTime">
+                            </span>
+                            <span class="font-thin text-sm">{{ __('Seconds') }}</span>
+                        </div>
+                    </template>
+                    <template x-if="!setting.autoSeries">
+                        <button type="button" class="flex w-auto h-auto max-h-[80px] items-center justify-center gap-2 rounded-2xl md:rounded-0 md:rounded-tr-2xl bg-gradient-to-r from-fuchsia-500 to-pink-500 px-6 py-5 text-xl font-black uppercase tracking-wide text-white shadow-2xl shadow-fuchsia-900/50 transition hover:scale-[1.02] active:scale-100 animate-pulse-slow cursor-pointer" :class="inRound ? 'cursor-not-allowed' : ''" x-on:click="setRound(); setTimeout(() => { moveScroll(0, 999999,'#sequences') }, 1000)" :disabled="inRound">{{ __('Clic Next Ball') }}</button>
+                    </template>
                 </div>
                 
             

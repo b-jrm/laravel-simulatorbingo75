@@ -35,7 +35,11 @@ document.addEventListener('alpine:init', () => {
                 callSpeed: 'normal',
                 timeAutoSeries: { // Estado del tiempo (Temporizador se Series automaticas),
                     instance: null,
-                    seconds: 5, // Segundos de duración del juego
+                    seconds: 5, // Segundos de duración del cada lanzamiento automatico de serie
+                    countDown: {
+                        instance: null,
+                        currentTime: 0,
+                    }
                 },
                 section: {
                     screen: {
@@ -197,6 +201,8 @@ document.addEventListener('alpine:init', () => {
                 // });
 
                 this.loading();
+
+                this.setting.timeAutoSeries.countDown.currentTime = this.setting.timeAutoSeries.seconds;
                 
                 // this.setting.sound.bolillero.audio = 'bolillero.mp3'
                 // setInterval(() => {
@@ -325,9 +331,11 @@ document.addEventListener('alpine:init', () => {
                             this.setVolume('bolillero');
                         }
 
+                        if( this.setting.autoSeries && this.setting.timeAutoSeries.countDown.currentTime <= 0) this.setting.timeAutoSeries.countDown.currentTime = this.setting.timeAutoSeries.seconds;
+
                         this.sync(['board', 'ranks', 'sequence']);
                         
-                    }, 550);
+                    }, 150);
 
                 }
 
@@ -353,6 +361,7 @@ document.addEventListener('alpine:init', () => {
                     // if(serie) this.toggleSerie(serie.number, serie.letter);
                     this.proccessAutoSelect(this.board[indexObject].letter, this.board[indexObject].ranges[indexPosition].number);
                 }
+
             },
             // Obtener un número aleatorio entre un rango minimo y máximo
             getRandom (min, max) {
@@ -364,12 +373,16 @@ document.addEventListener('alpine:init', () => {
                 this.setting.autoSeries = !this.setting.autoSeries;
 
                 if(this.setting.autoSeries){
-                    this.setting.timeAutoSeries.instance = 
-                        setInterval(
-                            () => { 
-                                this.setRound();
-                            }, this.setting.timeAutoSeries.seconds * 1000
-                        );
+                    this.setting.timeAutoSeries.instance = setInterval(
+                        () => { 
+                            this.setRound();
+                        }, this.setting.timeAutoSeries.seconds * 1000
+                    );
+
+                    this.setting.timeAutoSeries.countDown.instance = setInterval(
+                        () => this.setting.timeAutoSeries.countDown.currentTime--, 1000
+                    );
+
                 }else this.pauseAutoSeries();
 
                 if(this.ranks.length === 0) this.pauseAutoSeries(); 
@@ -377,7 +390,8 @@ document.addEventListener('alpine:init', () => {
             },
             pauseAutoSeries(){
                 clearInterval(this.setting.timeAutoSeries.instance);
-                this.setting.timeAutoSeries.instance = null;
+                clearInterval(this.setting.timeAutoSeries.countDown.instance);
+                this.setting.timeAutoSeries.instance = this.setting.timeAutoSeries.countDown.instance = null;
             },
             toggleAutoSelect(){
                 this.setting.autoSelect = !this.setting.autoSelect;
